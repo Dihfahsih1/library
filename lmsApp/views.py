@@ -17,7 +17,7 @@ def context_data(request):
         'system_host' : abs_uri,
         'page_name' : '',
         'page_title' : '',
-        'system_name' : 'Library Managament System',
+        'system_name' : 'Library Management',
         'topbar' : True,
         'footer' : True,
     }
@@ -90,11 +90,10 @@ def update_password(request):
         context['form'] = form
     return render(request,'update_password.html',context)
 
-# Create your views here.
 def login_page(request):
     context = context_data(request)
     context['topbar'] = False
-    context['footer'] = False
+    context['footer'] = True
     context['page_name'] = 'login'
     context['page_title'] = 'Login'
     return render(request, 'login.html', context)
