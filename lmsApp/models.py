@@ -88,7 +88,7 @@ class Students(models.Model):
         return str(f"{self.first_name}{' '+self.middle_name if not self.middle_name == '' else ''} {self.last_name}")
 
 class Borrow(models.Model):
-    student = models.ForeignKey(Students, on_delete= models.CASCADE, related_name="student_id_fk")
+    student = models.ForeignKey(Students, on_delete=models.CASCADE, related_name="student_id_fk")
     book = models.ForeignKey(Books, on_delete= models.CASCADE, related_name="book_id_fk")
     borrowing_date = models.DateField()
     return_date = models.DateField()

@@ -190,7 +190,6 @@ def manage_user(request, pk = None):
         context['user'] = {}
     else:
         context['user'] = User.objects.get(id=pk)
-    
     return render(request, 'manage_user.html', context)
 
 @login_required
