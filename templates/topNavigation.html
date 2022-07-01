@@ -56,16 +56,21 @@
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{% url 'user-page' %}">Users</a>
                     </li>
+                    
                     {% endif %}
                 </ul>
 
                 <ul class="navbar-nav d-flex flex-row">
                     {% if user.id %}
+                    
                     <li class="nav-item">
                         <a class="nav-link"  href="{% url 'profile-page' %}"><b>Howdy, {{user.username}}</b></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{% url 'welcome' %}">Website</a>
                     </li>
                     {% else %}
                     <li class="nav-item">

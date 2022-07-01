@@ -19,7 +19,7 @@ from django.db import transaction
 class student_signup(CreateView):
   model = User
   success_message = 'Your Account has been created sucessfully!'
-  success_url = reverse_lazy('Profile:login')
+  success_url = reverse_lazy('login-page')
   template_name = "Student/student_signup.html"
   form_class=StudentSignupForm
 

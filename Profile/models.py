@@ -19,7 +19,7 @@ class User(AbstractUser):
   telephone = models.CharField(max_length=200, null=True, blank=True)
   address = models.CharField(max_length=200, null=True, blank=True)
   birth_date = models.DateField(blank=True, null=True)
-  course = models.IntegerField(default=0,null=True, blank=True)
+  course = models.CharField(max_length=200,null=True, blank=True)
   
   profile_summary = models.TextField(max_length=2000,blank=True, null=True)
   is_active = models.BooleanField(default=True)

@@ -17,7 +17,7 @@ def context_data(request):
         'system_host' : abs_uri,
         'page_name' : '',
         'page_title' : '',
-        'system_name' : 'Library Management',
+        'system_name' : 'Nita Library Management',
         'topbar' : True,
         'footer' : True,
     }
