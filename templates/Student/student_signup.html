@@ -1,0 +1,71 @@
+{% extends 'base.html' %} {% load static %} {% block pageContent %}
+  {% block title %}
+      Student Signup Form
+  {% endblock %}
+  {% load static %}
+  {% load crispy_forms_tags %}
+  {% block content %}
+  <div class="container" style="background:white; max-width: 800px;">
+    <h2><small>Please sign up as a </small>a library user</h2>
+    {% if form.errors %}
+        {% for field in form %}
+            {% for error in field.errors %}
+                <div class="alert alert-danger alert-dismissable">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            <div class="alert alert-danger alert-dismissable">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endif %}
+		<form action="" method="post" enctype="multipart/form-data" role="form">
+            {% csrf_token %}
+			<hr class="colorgraph">
+            <div class="row">
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <label>Profile Photo</label>
+                        <input type="file" name="avatar">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="avatar" id="company_name" class="form-control" placeholder="Profile Photo">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="first_name" id="first_name" class="form-control" placeholder="First Name">
+                    </div>
+                    <div class="form-group">
+                      <input type="text" name="last_name" id="last_name" class="form-control" placeholder="Last Name">
+                  </div>
+                    <div class="form-group">
+                        <input type="text" name="email" id="email" class="form-control" placeholder="Email Address">
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                    
+                    <div class="form-group">
+                        <input type="text" name="telephone" id="telephone" class="form-control" placeholder="Telephone Number">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="course" id="course" class="form-control" placeholder="Course">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="password1" id="password1" class="form-control" placeholder="Password" autocomplete="new-password">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="password" name="password2" id="password2" class="form-control" placeholder="Confirm Password" autocomplete="new-password"> 
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <button class="btn btn-dark" type="submit">Register 
+            </button>
+		</form>
+    </div>
+
+    {% endblock %}

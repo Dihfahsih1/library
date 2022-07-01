@@ -11,16 +11,22 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+#####################RUNNING DEV SERVER###################
+# DJANGO_SETTINGS_MODULE=django_lms.dev_settings python3 manage.py runserver
+##########################################################
+
 # Application definition
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django.contrib.humanize',
-    'lmsApp.apps.lmsAppConfig',
+  'django.contrib.admin',
+  'django.contrib.auth',
+  'django.contrib.contenttypes',
+  'django.contrib.sessions',
+  'django.contrib.messages',
+  'django.contrib.staticfiles',
+  'django.contrib.humanize',
+  'lmsApp.apps.lmsAppConfig',
+  'Profile',
+  'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -34,11 +40,11 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'django_lms.urls'
-
+AUTH_USER_MODEL = 'Profile.User'
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -81,19 +87,14 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATIC_URL = 'static/'
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [ 
-    BASE_DIR / "static",
-    ]
-
+  BASE_DIR / "static",]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login'
-
 django_heroku.settings(locals())

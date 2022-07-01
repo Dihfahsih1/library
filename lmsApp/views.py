@@ -118,6 +118,9 @@ def login_user(request):
             resp['msg'] = "Incorrect username or password"
     return HttpResponse(json.dumps(resp),content_type='application/json')
 
+def welcome(request):
+    return render(request, 'main-page/index.html')
+
 @login_required
 def home(request):
     context = context_data(request)
