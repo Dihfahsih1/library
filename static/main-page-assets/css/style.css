@@ -6,7 +6,7 @@ Note: Licence under Creative Commons Attribution 3.0
 @import url('http://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700|Open+Sans:400,600,700'); 
 @import url('font-awesome.css');  
 @import url('animate.css');
-
+{% load static %}
 body {
 	font-family:'Open Sans', Arial, sans-serif;
 	font-weight:300;
@@ -65,15 +65,24 @@ ul.withArrow li{
 	
 }
 ul.withArrow li span{
-	margin-right: 10px;
-	font-weight: 700;
-	color: #86BC42;
-	border: 1px solid;
-	padding: 4px 8px;
-	font-size: 11px;
-	border-radius: 50%;
-	height: 20px;
-	width: 20px;
+	
+margin-right: 10px;
+	
+font-weight: 700;
+	
+color: #86BC42;
+	
+border: 1px solid;
+	
+padding: 4px 8px;
+	
+font-size: 11px;
+	
+border-radius: 50%;
+	
+height: 20px;
+	
+width: 20px;
 }
 .widget {
     color: #858585;
@@ -470,7 +479,7 @@ max-width: 100%;
 .testimonial-area {
 padding: 0 0 0 0;
 margin:0;
-background: url(../img/low-poly01.jpg) fixed center center;
+background: url('static/main-page-assets/img/works/1.jpg') fixed center center;
 background-size: cover;
 -webkit-background-size: cover;
 -moz-background-size: cover;
@@ -508,15 +517,15 @@ section.hero-text h1{
       /*box-shadow: 0px 0px 2px 0px rgb(155, 155, 155);*/
       border-radius: 8px; }
   #clients .client .client1 {
-    background: url("../img/client1.png") 0 -75px; }
+    background: url("static/main-page-assets/img/client1.png") 0 -75px; }
     #clients .client .client1:hover {
       background-position: 1px 0px; }
   #clients .client .client2 {
-    background: url("../img/client2.png") 0 -75px; }
+    background: url("static/main-page-assets/img/client2.png") 0 -75px; }
     #clients .client .client2:hover {
       background-position: -1px 0px; }
   #clients .client .client3 {
-    background: url("../img/client3.png") 0 -76px; }
+    background: url("static/main-page-assets/img/client3.png") 0 -76px; }
     #clients .client .client3:hover {
       background-position: 0px 0px; }
 
