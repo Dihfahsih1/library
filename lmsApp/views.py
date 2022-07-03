@@ -547,7 +547,7 @@ def save_borrow(request):
                         resp['msg'] += str('<br/>')
                     resp['msg'] += str(f'[{field.name}] {error}')
     else:
-         resp['msg'] = "There's no data sent on the request"
+        resp['msg'] = "There's no data sent on the request"
 
     return HttpResponse(json.dumps(resp), content_type="application/json")
 
