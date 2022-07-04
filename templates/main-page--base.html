@@ -28,9 +28,17 @@
             <div class="col-md-12">
               <p class="pull-left hidden-xs">Nita Online Library</p>
               <p class="pull-right"><i class="fa fa-phone"></i>Tel No.(+256) 123-456-789</p>
-              {% if request.user is authenticated %}
+              {% if request.user.is_authenticated %}
               <li class="nav-item">
-                <a class="nav-link"  href="{% url 'profile-page' %}"><b>Howdy, {{user.username}}</b></a>
+                <a class="nav-link"  href="{% url 'profile-page' %}"><b>Hey, 
+                  {% if request.user.email is not None %}
+                  {{ user.email}}
+                  {% else %}
+                  {{user.username}}
+                  {% endif %}
+                </b></a>
+                |<a class="nav-link" aria-current="page" href="{% url 'logout' %}">Logout</a>
+
               </li>
               {% else %}
               <li class="nav-item">

@@ -1,0 +1,29 @@
+{% extends 'base.html' %} {% load static %} {% block pageContent %}
+<section class="py-4">
+    <div class="container">
+      <form  method="post" class="form-horizontal">
+
+    		<center><h2>ISSUE BOOK TO STUDENT</h2></center>
+
+            {% csrf_token %}
+
+            {% for field in form %}
+            <div class="form-group">
+              <label class="control-label col-xs-4">{{ field.label_tag }}</label>
+              <div class="col-xs-8">
+              {{ field }}
+               </div>
+            </div>
+            {% endfor %}
+
+
+    		<div class="form-group">
+    			<div class="col-xs-8 col-xs-offset-4">
+            <button type="submit" class="btn btn-primary btn-lg">ISSUE</button>
+    			</div>
+    		</div>
+        </form>
+    </div>
+</section>
+{% endblock pageContent %}
+

@@ -112,6 +112,12 @@ def login_user(request):
             if user.is_active:
                 login(request, user)
                 resp['status']='success'
+                if user.is_staff:
+                    
+                    return redirect('home/')
+                else:
+                    print("logged in")
+                    return redirect('/')
             else:
                 resp['msg'] = "Incorrect username or password"
         else:
@@ -590,3 +596,18 @@ def delete_borrow(request, pk = None):
             resp['msg'] = "Deleting Transaction Failed"
 
     return HttpResponse(json.dumps(resp), content_type="application/json")
+
+
+######ISSUE BOOK MODULE#######
+def issuebook_view(request):
+    form=forms.IssuedBookForm()
+    if request.method=='POST':
+        #now this form have data from html
+        form=forms.IssuedBookForm(request.POST)
+        if form.is_valid():
+            obj=models.IssuedBook()
+            obj.enrollment=request.POST.get('enrollment2')
+            obj.isbn=request.POST.get('isbn2')
+            obj.save()
+            return render(request,'library/bookissued.html')
+    return render(request,'library/issuebook.html',{'form':form})

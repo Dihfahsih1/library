@@ -54,4 +54,7 @@ urlpatterns = [
     path('view_borrow/<int:pk>',views.view_borrow,name='view-borrow-pk'),
     path('save_borrow',views.save_borrow,name='save-borrow'),
     path('delete_borrow/<int:pk>',views.delete_borrow,name='delete-borrow'),
+    
+    #issue book url
+    path('issuebook', views.issuebook_view, name="issuebook"),
 ]+ static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
