@@ -613,12 +613,12 @@ def issuebook_view(request):
     return render(request,'library/issuebook.html',{'form':form})
 
 def search(request):        
-    if request.method == 'GET': # this will be GET now      
-        book_name =  request.GET.get('search') # do some research what it does       
+    if request.method == 'POST': # this will be GET now      
+        book_name =  request.POST.get('search') # do some research what it does       
         try:
             status = Books.objects.filter(title__icontains=book_name) # filter returns a list so you might consider skip except part
         except:
             pass
-        return render(request,"search.html",{"books":status})
+        return render(request,"main-page/search-catalogue.html",{"books":status})
     else:
-        return render(request,"search.html",{})
+        return render(request,"main-page/search-catalogue.html",{})

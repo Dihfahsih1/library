@@ -72,11 +72,12 @@
                 <li><form method="POST" action="{% url 'search' %}"> 
                   {% csrf_token %}
                  
-                  <div class="input-group" style="padding-top:12px">
-                    <input type="text"  name="search" class="form-control border-end-0 rounded" placeholder="Search book title">
-                    <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                  <div class="col-lg-9" style="padding-top:12px">
+                    <input type="text"  name="search" class="form-control" placeholder="Search book title">
                   </div>
-                  
+                  <div class="col-lg-2" style="padding-top:12px">
+                    <button type="submit"  class="btn btn-search input-group-addon" style="border-radius:50%"><i class="fa fa-search"></i></button>
+                  </div>
 
                 </form></li>
                 <li><a href="/">Home</a></li> 
