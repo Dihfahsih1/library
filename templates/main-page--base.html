@@ -53,17 +53,32 @@
       <!-- start header -->
       <header>
         <div class="navbar navbar-default navbar-static-top">
-          <div class="container">
+          <div class="container-fluid">
             <div class="navbar-header">
               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="/"><img style="height:100px; margin-top:-20px" src="{% static 'assets/img/logo.png' %}" alt="logo"/></a>
+             
+                  <a class="navbar-brand" href="/">
+                    <img style="height:100px; margin-top:-35px" src="{% static 'assets/img/logo.png' %}" alt="logo"/>
+                  </a>
+                
+
             </div>
             <div class="navbar-collapse collapse ">
               <ul class="nav navbar-nav">
+                <li><form method="POST" action="{% url 'search' %}"> 
+                  {% csrf_token %}
+                 
+                  <div class="input-group" style="padding-top:12px">
+                    <input type="text"  name="search" class="form-control border-end-0 rounded" placeholder="Search book title">
+                    <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                  </div>
+                  
+
+                </form></li>
                 <li><a href="/">Home</a></li> 
                 <li><a href="#">About Us </a></li> 
                 <li><a href="#">Books Available</a></li>

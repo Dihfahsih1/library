@@ -13,7 +13,6 @@ urlpatterns = [
     path('login',views.login_page,name='login-page'),
     path('register',views.userregister,name='register-page'),
     path('save_register',views.save_register,name='register-user'),
-    path('user_login',views.login_user,name='login-user'),
     path('home/',views.home,name='home-page'),
     path('logout',views.logout_user,name='logout'),
     path('profile',views.profile,name='profile-page'),
@@ -54,6 +53,7 @@ urlpatterns = [
     path('view_borrow/<int:pk>',views.view_borrow,name='view-borrow-pk'),
     path('save_borrow',views.save_borrow,name='save-borrow'),
     path('delete_borrow/<int:pk>',views.delete_borrow,name='delete-borrow'),
+    path('search',views.search,name='search'),
     
     #issue book url
     path('issuebook', views.issuebook_view, name="issuebook"),

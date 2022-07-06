@@ -8,6 +8,7 @@ from lmsApp import models, forms
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from . models import Books
 
 def context_data(request):
     fullpath = request.get_full_path()
@@ -122,32 +123,6 @@ def login_page(request):
             resp['msg'] = "Incorrect username or password"
     return render(request, 'login.html', context)
 
-
-def login_user(request):
-    logout(request)
-    resp = {"status":'failed','msg':''}
-    username = ''
-    password = ''
-    if request.POST:
-        username = request.POST['username']
-        password = request.POST['password']
-
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                resp['status']='success'
-                if user.is_staff:
-                    
-                    return redirect('home/')
-                else:
-                    print("logged in")
-                    return redirect('/')
-            else:
-                resp['msg'] = "Incorrect username or password"
-        else:
-            resp['msg'] = "Incorrect username or password"
-    return HttpResponse(json.dumps(resp),content_type='application/json')
 
 def welcome(request):
     return render(request, 'main-page/index.html')
@@ -636,3 +611,14 @@ def issuebook_view(request):
             obj.save()
             return render(request,'library/bookissued.html')
     return render(request,'library/issuebook.html',{'form':form})
+
+def search(request):        
+    if request.method == 'GET': # this will be GET now      
+        book_name =  request.GET.get('search') # do some research what it does       
+        try:
+            status = Books.objects.filter(title__icontains=book_name) # filter returns a list so you might consider skip except part
+        except:
+            pass
+        return render(request,"search.html",{"books":status})
+    else:
+        return render(request,"search.html",{})

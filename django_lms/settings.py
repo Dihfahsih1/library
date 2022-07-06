@@ -3,6 +3,10 @@ import dj_database_url
 
 from pathlib import Path
 import os
+
+import environ
+env = environ.Env()
+environ.Env.read_env()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-j7xv%)66l8u0^8sxnj7()z$zll8&a2*_h2r84yeo9f2fidx8^7'
@@ -27,7 +31,15 @@ INSTALLED_APPS = [
   'lmsApp.apps.lmsAppConfig',
   'Profile',
   'crispy_forms',
+  'github_storages',
 ]
+
+####GIT-HUB STORAGE####
+# DEFAULT_FILE_STORAGE = "github_storages.backend.BackendStorages"
+# GITHUB_HANDLE =env('GITHUB_HANDLE')
+# ACCESS_TOKEN =env('ACCESS_TOKEN')
+# GITHUB_REPO_NAME =env('GITHUB_REPO_NAME')
+# MEDIA_BUCKET_NAME =env('MEDIA_BUCKET_NAME')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
