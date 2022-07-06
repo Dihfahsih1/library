@@ -2,8 +2,9 @@ import django_heroku
 import dj_database_url
 
 from pathlib import Path
-import os
-
+import os,django
+from django.utils.encoding import force_str
+django.utils.encoding.force_text = force_str
 import environ
 env = environ.Env()
 environ.Env.read_env()
@@ -35,11 +36,12 @@ INSTALLED_APPS = [
 ]
 
 ####GIT-HUB STORAGE####
-# DEFAULT_FILE_STORAGE = "github_storages.backend.BackendStorages"
-# GITHUB_HANDLE =env('GITHUB_HANDLE')
-# ACCESS_TOKEN =env('ACCESS_TOKEN')
-# GITHUB_REPO_NAME =env('GITHUB_REPO_NAME')
-# MEDIA_BUCKET_NAME =env('MEDIA_BUCKET_NAME')
+if DEBUG ==False:
+    DEFAULT_FILE_STORAGE = "github_storages.backend.BackendStorages"
+    GITHUB_HANDLE =env('GITHUB_HANDLE')
+    ACCESS_TOKEN =env('ACCESS_TOKEN')
+    GITHUB_REPO_NAME =env('GITHUB_REPO_NAME')
+    MEDIA_BUCKET_NAME =env('MEDIA_BUCKET_NAME')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

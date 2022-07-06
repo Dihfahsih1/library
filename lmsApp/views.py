@@ -619,6 +619,7 @@ def search(request):
             status = Books.objects.filter(title__icontains=book_name) # filter returns a list so you might consider skip except part
         except:
             pass
-        return render(request,"main-page/search_catalogue.html",{"books":status})
+        context={"books":status, 'item':book_name}
+        return render(request,"main-page/search_catalogue.html",context)
     else:
         return render(request,"main-page/search_catalogue.html",{})

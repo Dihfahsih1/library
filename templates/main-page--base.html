@@ -73,7 +73,7 @@
                   {% csrf_token %}
                  
                   <div class="col-lg-9" style="padding-top:12px">
-                    <input type="text"  name="search" class="form-control" placeholder="Search book title">
+                    <input type="text"  name="search" class="form-control" {% if request.POST %}placeholder={{item}} {% else %} placeholder="Search book title" {% endif %}>
                   </div>
                   <div class="col-lg-2" style="padding-top:12px">
                     <button type="submit"  class="btn btn-search input-group-addon" style="border-radius:50%"><i class="fa fa-search"></i></button>

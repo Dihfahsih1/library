@@ -44,6 +44,7 @@ class SubCategory(models.Model):
         return str(f"{self.category} - {self.name}")
 
 class Books(models.Model):
+    book_cover = models.ImageField(upload_to="media/book-covers", blank=True, null=False)
     sub_category = models.ForeignKey(SubCategory, on_delete= models.CASCADE)
     isbn = models.CharField(max_length=250)
     title = models.CharField(max_length=250)

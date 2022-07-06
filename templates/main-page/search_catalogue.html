@@ -16,33 +16,35 @@
 	
 						<div class="row"> 
 							<div class="col-md-12">
-								<div class="about-logo">
-									{% if books %}
-												{% for each_book in books %} 
-													<a href="{% url 'welcome' %}">
-													<!--Upon successful search book image with hyperlink appears -->													
-													<div class="gallery-item">
-															<div class="gallery-thumb">
-																	<img src="{{each_book.image.url}}" alt="No Image" class="img-responsive" >
-																	
-															</div>
-															<div class="gallery-details">
-																<div class="editContent">
-																		<h5>{{each_book.title}}</h5>
+								<div class="col-md-4">
+									<div class="about-logo">
+										{% if books %}
+													{% for each_book in books %} 
+														<a href="{% url 'welcome' %}" style="text-decoration:none">
+														<!--Upon successful search book image with hyperlink appears -->													
+														<div class="gallery-item">
+																<div class="gallery-thumb">
+																		<img {% if each_book.book_cover %} src="{{each_book.book_cover.url}}" {% else %}alt="No Image"{% endif %} class="img-responsive" width="200">
+																		
 																</div>
-																<div class="editContent">
-																		<p>{{each_book.description}}</p>
+																<div class="gallery-details">
+																	<div class="editContent">
+																			<h5>{{each_book.title}} - <i>Author:{{each_book.author}}</i></h5>
+																	</div>
+																	<div class="editContent">
+																			<p>{{each_book.description}}</p>
+																	</div>
 																</div>
-																<p>Authored By:{{each_book.author}}</p> 
-															</div>
-														</a>
-													</div>
-												{% endfor %}
+															</a>
+														</div>
+														<a href="#"><button class="btn btn-primary">Request for this book</button></a>
+													{% endfor %}
 
-												{% else %}
-												<h4>There is no book with search a title,please try again</h4>
-											{% endif %}
-								</div>  
+													{% else %}
+													<h4>There is no book with search a title <b>{{item}}</b>, Please try with a corect one </h4>
+												{% endif %}
+									</div> 
+								</div> 
 							</div>
 						</div> 
 						
