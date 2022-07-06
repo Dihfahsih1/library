@@ -96,7 +96,32 @@ def login_page(request):
     context['footer'] = True
     context['page_name'] = 'login'
     context['page_title'] = 'Login'
+    
+    logout(request)
+    resp = {"status":'failed','msg':''}
+    username = ''
+    password = ''
+    if request.POST:
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                resp['status']='success'
+                if user.is_staff:
+                    
+                    return redirect('home/')
+                else:
+                    print("logged in")
+                    return redirect('/')
+            else:
+                resp['msg'] = "Incorrect username or password"
+        else:
+            resp['msg'] = "Incorrect username or password"
     return render(request, 'login.html', context)
+
 
 def login_user(request):
     logout(request)
