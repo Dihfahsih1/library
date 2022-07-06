@@ -619,6 +619,6 @@ def search(request):
             status = Books.objects.filter(title__icontains=book_name) # filter returns a list so you might consider skip except part
         except:
             pass
-        return render(request,"main-page/search-catalogue.html",{"books":status})
+        return render(request,"main-page/search_catalogue.html",{"books":status})
     else:
-        return render(request,"main-page/search-catalogue.html",{})
+        return render(request,"main-page/search_catalogue.html",{})
