@@ -1,0 +1,49 @@
+{% extends 'main-page--base.html' %}
+{% load static %}
+{% block content %}
+	<section id="banner">
+	<section id="inner-headline">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<h2 class="pageTitle">Library Book Catalogue</h2>
+			</div>
+		</div>
+	</div>
+	</section>
+	<section id="content">
+	<div class="container">
+	
+    <div class="row"> 
+      <div class="col-md-12">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">Book Cover</th>
+              <th scope="col">Title</th>
+              <th scope="col">Sub Category</th>
+              <th scope="col">Author</th>
+              <th scope="col">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for book in book_list%}
+            <tr>
+              {% if book.book_cover %}
+              <td ><img {% if book.book_cover %} src="{{book.book_cover.url}}" {% else %}alt="No Image"{% endif %} class="img-responsive" width="200"></td>
+              {% endif %}
+              <td>{{book.title}}</td>
+              <td>{{book.sub_category}}</td>
+              <td>{{book.author}}</td>
+              <td>{{book.description}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div> 
+						
+	</div>
+	</section>	
+	</div>
+	{% endblock %}

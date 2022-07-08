@@ -11,44 +11,28 @@
 		</div>
 	</div>
 	</section>
-	<section id="content">
+	<section id="content"
 	<div class="container">
-	
-						<div class="row"> 
-							<div class="col-md-12">
-								<div class="col-md-4">
-									<div class="about-logo">
-										{% if books %}
-													{% for each_book in books %} 
-														<a href="{% url 'welcome' %}" style="text-decoration:none">
-														<!--Upon successful search book image with hyperlink appears -->													
-														<div class="gallery-item">
-																<div class="gallery-thumb">
-																		<img {% if each_book.book_cover %} src="{{each_book.book_cover.url}}" {% else %}alt="No Image"{% endif %} class="img-responsive" width="200">
-																		
-																</div>
-																<div class="gallery-details">
-																	<div class="editContent">
-																			<h5>{{each_book.title}} - <i>Author:{{each_book.author}}</i></h5>
-																	</div>
-																	<div class="editContent">
-																			<p>{{each_book.description}}</p>
-																	</div>
-																</div>
-															</a>
-														</div>
-														<a href="#"><button class="btn btn-primary">Request for this book</button></a>
-													{% endfor %}
-
-													{% else %}
-													<h4>There is no book with search a title <b>{{item}}</b>, Please try with a corect one </h4>
-												{% endif %}
-									</div> 
-								</div> 
+			<div class="row">
+			{% if books %}
+				{% for each_book in books %} 
+					<div class="col-lg-4">
+						<div class="card border-success mb-3" style="max-width: 18rem">
+							<div class="card-header bg-transparent border-success">{{each_book.title}}</div>
+							<div class="card-body text-success">
+								<h5 class="card-title">Author: {{each_book.author}}</h5>
+								<img {% if each_book.book_cover %} src="{{each_book.book_cover.url}}" {% else %}alt="No Image"{% endif %} class="img-responsive" width="200">
+								<p class="card-text">{{each_book.description}}.</p>
 							</div>
-						</div> 
-						
-	</div>
-	</section>	
-	</div>
-	{% endblock %}
+							<div class="card-footer bg-transparent border-success"><a href="#"><button class="btn btn-primary">Request for this book</button></a><br></div>
+						</div>
+					</div>
+				{% endfor %}
+			{% else %}
+				<h4>There is no book with search a title <b>{{item}}</b>, Please try with a corect one </h4> 
+			{% endif %}
+				</div>
+			</div>
+		</div> 	
+</div>
+{% endblock %}

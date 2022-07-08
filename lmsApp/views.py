@@ -612,6 +612,7 @@ def issuebook_view(request):
             return render(request,'library/bookissued.html')
     return render(request,'library/issuebook.html',{'form':form})
 
+#####Searching Catalogue#############
 def search(request):        
     if request.method == 'POST': # this will be GET now      
         book_name =  request.POST.get('search') # do some research what it does       
@@ -623,3 +624,8 @@ def search(request):
         return render(request,"main-page/search_catalogue.html",context)
     else:
         return render(request,"main-page/search_catalogue.html",{})
+    
+def book_catalogue(request):
+    all_books = Books.objects.all()
+    context={'book_list':all_books}
+    return render(request,'main-page/book_catalogue.html', context)
