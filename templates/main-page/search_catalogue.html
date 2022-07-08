@@ -11,14 +11,14 @@
 		</div>
 	</div>
 	</section>
-	<section id="content"
+	<section id="content">
 	<div class="container">
 			<div class="row">
 			{% if books %}
 				{% for each_book in books %} 
-					<div class="col-lg-4">
-						<div class="card border-success mb-3" style="max-width: 18rem">
-							<div class="card-header bg-transparent border-success">{{each_book.title}}</div>
+					<div class="col-lg-3">
+						<div class="card border-success mb-3" style="border: 1px solid black; text-align: center">
+							<div class="card-header bg-transparent border-success"><h3>{{each_book.title}}</h3></div>
 							<div class="card-body text-success">
 								<h5 class="card-title">Author: {{each_book.author}}</h5>
 								<img {% if each_book.book_cover %} src="{{each_book.book_cover.url}}" {% else %}alt="No Image"{% endif %} class="img-responsive" width="200">
