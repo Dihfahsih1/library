@@ -1,5 +1,5 @@
 import datetime
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render,get_object_or_404
 import json
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -8,7 +8,9 @@ from lmsApp import models, forms
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from . models import Books
+from . models import *
+from Profile.models import User
+from django.contrib import messages
 
 def context_data(request):
     fullpath = request.get_full_path()
@@ -629,3 +631,25 @@ def book_catalogue(request):
     all_books = Books.objects.all()
     context={'book_list':all_books}
     return render(request,'main-page/book_catalogue.html', context)
+
+###Borrow Book###
+
+@login_required
+def student_request_issue(request, pk):
+    obj = Books.objects.get(id=pk)
+    stu=User.objects.get(id=request.user.id)
+    s = get_object_or_404(User, id=str(request.user.id))
+    if s.total_books_due < 10:
+        messages.success(request,"book has been isuued, You can collect book from library")
+        a = Borrow()
+        a.student = s
+        a.book = obj
+        a.issue_date = datetime.datetime.now()
+        obj.available_copies = obj.available_copies - 1
+        obj.save()
+        stu.total_books_due=stu.total_books_due+1
+        stu.save()
+        a.save()
+    else:
+        messages.success(request,"you have exceeded limit.")
+    return render(request, 'catalog/result.html', locals())
