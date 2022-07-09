@@ -20,6 +20,7 @@ class User(AbstractUser):
   address=models.CharField(max_length=200, null=True, blank=True)
   birth_date=models.DateField(blank=True, null=True)
   course=models.CharField(max_length=200,null=True, blank=True)
+  total_books_due=models.IntegerField(default=0)
   
   profile_summary = models.TextField(max_length=2000,blank=True, null=True)
   is_active = models.BooleanField(default=True)

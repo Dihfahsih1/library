@@ -5,10 +5,11 @@ from sys import prefix
 from unicodedata import category
 from django import forms
 from numpy import require
-from lmsApp import models
+from . models import *
 
 from django.contrib.auth.forms import UserCreationForm,PasswordChangeForm, UserChangeForm
 from django.contrib.auth.models import User
+from Profile.models import *
 import datetime
 
 class SaveUser(UserCreationForm):
@@ -94,7 +95,7 @@ class SaveCategory(forms.ModelForm):
     status = forms.CharField(max_length=2)
 
     class Meta:
-        model = models.Category
+        model =Category
         fields = ('name', 'description', 'status', )
 
     def clean_name(self):
@@ -116,7 +117,7 @@ class SaveSubCategory(forms.ModelForm):
     status = forms.CharField(max_length=2)
 
     class Meta:
-        model = models.SubCategory
+        model = SubCategory
         fields = ('category', 'name', 'description', 'status', )
 
     def clean_category(self):
@@ -152,7 +153,7 @@ class SaveBook(forms.ModelForm):
     status = forms.CharField(max_length=2)
 
     class Meta:
-        model = models.Books
+        model = Books
         fields = ('isbn', 'sub_category', 'title', 'description', 'author', 'publisher', 'date_published', 'status', )
 
     def clean_sub_category(self):
@@ -189,7 +190,7 @@ class SaveStudent(forms.ModelForm):
     status = forms.CharField(max_length=2)
 
     class Meta:
-        model = models.Students
+        model = Students
         fields = ('code', 'first_name', 'middle_name', 'last_name', 'gender', 'contact', 'email', 'address', 'department', 'course', 'status', )
 
     def clean_code(self):
@@ -212,13 +213,13 @@ class SaveBorrow(forms.ModelForm):
     status = forms.CharField(max_length=2)
 
     class Meta:
-        model = models.Borrow
+        model = Borrow
         fields = ('student', 'book', 'borrowing_date', 'return_date', 'status', )
 
     def clean_student(self):
         student = int(self.data['student']) if (self.data['student']).isnumeric() else 0
         try:
-            student = models.Students.objects.get(id = student)
+            student = models.User.objects.get(id = student)
             return student
         except:
             raise forms.ValidationError("Invalid student.")
@@ -233,6 +234,11 @@ class SaveBorrow(forms.ModelForm):
 
 class IssuedBookForm(forms.Form):
     #to_field_name value will be stored when form is submitted.....__str__ method of book model will be shown there in html
-    isbn2=forms.ModelChoiceField(queryset=models.Books.objects.all(),empty_label="Name and isbn", to_field_name="isbn",label='Name and Isbn')
-    enrollment2=forms.ModelChoiceField(queryset=models.StudentExtra.objects.all(),empty_label="Name and enrollment",to_field_name='enrollment',label='Name and enrollment')
+    isbn2=forms.ModelChoiceField(queryset=Books.objects.all(),empty_label="Name and isbn", to_field_name="isbn",label='Name and Isbn')
+    enrollment2=forms.ModelChoiceField(queryset=StudentExtra.objects.all(),empty_label="Name and enrollment",to_field_name='enrollment',label='Name and enrollment')
+    
+    
+class BookRequestForm(forms.Form):
+    class Meta:
+        model=Borrow
     

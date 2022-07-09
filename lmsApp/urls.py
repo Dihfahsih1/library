@@ -56,6 +56,8 @@ urlpatterns = [
     path('search',views.search,name='search'),
     
     #issue book url
+    path('book/<int:pk>/request/', views.book_request, name="book-request"),
     path('issuebook', views.issuebook_view, name="issuebook"),
     path('library/catalogue', views.book_catalogue, name="book-catalogue"),
+    path('book/<int:pk>/request_issue/', views.student_request_issue, name='request_issue'),
 ]+ static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

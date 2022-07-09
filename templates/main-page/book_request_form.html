@@ -1,0 +1,66 @@
+{% extends 'main-page--base.html' %} {% load static %} 
+{% block content %}
+
+  {% load static %}
+  {% load crispy_forms_tags %}
+  <div class="container" style="background:white; max-width: 800px;">
+    <div class="card border-success mb-3" style="border: 1px solid black; text-align: center">
+      <div class="card-header bg-transparent border-success"><h3>{{book.title}}</h3></div>
+      <div class="card-body text-success">
+        <h5 class="card-title">Author: {{book.author}}</h5>
+        <img {% if book.book_cover %} src="{{book.book_cover.url}}" {% else %}alt="No Image"{% endif %} class="img-responsive" width="200">
+        <p class="card-text">{{book.description}}.</p>
+      </div>
+    </div>
+    <h2><small>Please fill in the form correctly </small></h2>
+    {% if form.errors %}
+        {% for field in form %}
+            {% for error in field.errors %}
+                <div class="alert alert-danger alert-dismissable">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            <div class="alert alert-danger alert-dismissable">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endif %}
+		<form action="" method="post" enctype="multipart/form-data" role="form">
+            {% csrf_token %}
+			<hr class="colorgraph">
+          <div class="row">
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <input type="hidden" name="student" value="request.user.id">
+                    </div>
+                    <div class="form-group">
+                      <input type="hidden" name="book" value="{{book.id}}">
+                  </div>
+                  <input type="hidden" id="status" name="status" value="1">
+
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                  <div class="mb-3">
+                      <label for="borrowing_date" class="control-label">Date of Borowing</label>
+                      <input type="date" id="borrowing_date" name="borrowing_date" class="form-control form-control-sm rounded-0" >
+                  </div>
+                  <div class="mb-3">
+                    <label for="return_date" class="control-label">Date to Return</label>
+                    <input type="date" id="return_date" name="return_date" class="form-control form-control-sm rounded-0">
+                  </div>
+                  <hr>
+                  <div class="mb-3">
+                    <button class="btn btn-dark" type="submit">Make Request 
+                    </button>
+                  </div>
+
+              </div>
+             </div>
+        </div>
+      </form>
+    </div>
+  {% endblock %}

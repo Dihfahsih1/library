@@ -9,6 +9,7 @@ from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from . models import *
+from . forms import *
 from Profile.models import User
 from django.contrib import messages
 
@@ -633,6 +634,18 @@ def book_catalogue(request):
     return render(request,'main-page/book_catalogue.html', context)
 
 ###Borrow Book###
+@login_required
+def book_request(request,pk):
+    #book_id=request.GET.get('q','')
+    book=get_object_or_404(Books, id=pk)
+    form = SaveBorrow()
+    if request.method=="POST":
+        
+        if form.is_valid():
+            form.save()
+    
+    context={"form":form, 'book':book}
+    return render(request, "main-page/book_request_form.html", context)
 
 @login_required
 def student_request_issue(request, pk):
@@ -652,4 +665,4 @@ def student_request_issue(request, pk):
         a.save()
     else:
         messages.success(request,"you have exceeded limit.")
-    return render(request, 'catalog/result.html', locals())
+    return render(request, 'main-page/search_catalogue.html', locals())

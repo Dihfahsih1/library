@@ -24,7 +24,8 @@
 								<img {% if each_book.book_cover %} src="{{each_book.book_cover.url}}" {% else %}alt="No Image"{% endif %} class="img-responsive" width="200">
 								<p class="card-text">{{each_book.description}}.</p>
 							</div>
-							<div class="card-footer bg-transparent border-success"><a href="#"><button class="btn btn-primary">Request for this book</button></a><br></div>
+							<div class="card-footer bg-transparent border-success">
+								<a href="{% url 'book-request' each_book.id %}"><button class="btn btn-primary">Request for this book</button></a><br></div>
 						</div>
 					</div>
 				{% endfor %}
