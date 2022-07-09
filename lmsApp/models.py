@@ -7,7 +7,6 @@ from django.dispatch import receiver
 from datetime import datetime,timedelta
 
 from PIL import Image
-from django.contrib.auth.models import User
 from django.contrib.auth.base_user import BaseUserManager
 from Profile.models import User
 
@@ -90,7 +89,7 @@ class Students(models.Model):
         return str(f"{self.first_name}{' '+self.middle_name if not self.middle_name == '' else ''} {self.last_name}")
 
 class Borrow(models.Model):
-    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name="student_id_fk")
+    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name="student_id_fk", blank=True, null=True)
     book = models.ForeignKey(Books, on_delete= models.CASCADE, related_name="book_id_fk")
     borrowing_date = models.DateField()
     return_date = models.DateField()
@@ -102,7 +101,7 @@ class Borrow(models.Model):
         verbose_name_plural = "Borrowing Transactions"
 
     def __str__(self):
-        return str(f"{self.student.code}")
+        return str(f"{self.student}")
 class StudentExtra(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE)
     enrollment = models.CharField(max_length=40)

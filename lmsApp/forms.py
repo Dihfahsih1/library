@@ -123,7 +123,7 @@ class SaveSubCategory(forms.ModelForm):
     def clean_category(self):
         cid = int(self.data['category']) if (self.data['category']).isnumeric() else 0
         try:
-            category = models.Category.objects.get(id = cid)
+            category =Category.objects.get(id = cid)
             return category
         except:
             raise forms.ValidationError("Invalid Category.")
@@ -133,7 +133,7 @@ class SaveSubCategory(forms.ModelForm):
         cid = int(self.data['category']) if (self.data['category']).isnumeric() else 0
         name = self.cleaned_data['name']
         try:
-            category = models.Category.objects.get(id = cid)
+            category =Category.objects.get(id = cid)
             if id > 0:
                 sub_category = models.SubCategory.objects.exclude(id = id).get(name = name, delete_flag = 0, category = category)
             else:
@@ -159,7 +159,7 @@ class SaveBook(forms.ModelForm):
     def clean_sub_category(self):
         scid = int(self.data['sub_category']) if (self.data['sub_category']).isnumeric() else 0
         try:
-            sub_category = models.SubCategory.objects.get(id = scid)
+            sub_category =SubCategory.objects.get(id = scid)
             return sub_category
         except:
             raise forms.ValidationError("Invalid Sub Category.")
@@ -169,9 +169,9 @@ class SaveBook(forms.ModelForm):
         isbn = self.cleaned_data['isbn']
         try:
             if id > 0:
-                book = models.Books.objects.exclude(id = id).get(isbn = isbn, delete_flag = 0)
+                book =Books.objects.exclude(id = id).get(isbn = isbn, delete_flag = 0)
             else:
-                book = models.Books.objects.get(isbn = isbn, delete_flag = 0)
+                book = Books.objects.get(isbn = isbn, delete_flag = 0)
         except:
             return isbn
         raise forms.ValidationError("ISBN already exists on the Database.")
@@ -206,31 +206,25 @@ class SaveStudent(forms.ModelForm):
         raise forms.ValidationError("Student School Id already exists on the Database.")
     
 class SaveBorrow(forms.ModelForm):
-    student = forms.CharField(max_length=250)
-    book = forms.CharField(max_length=250)
-    borrowing_date = forms.DateField()
-    return_date = forms.DateField()
-    status = forms.CharField(max_length=2)
-
     class Meta:
         model = Borrow
         fields = ('student', 'book', 'borrowing_date', 'return_date', 'status', )
 
-    def clean_student(self):
-        student = int(self.data['student']) if (self.data['student']).isnumeric() else 0
-        try:
-            student = models.User.objects.get(id = student)
-            return student
-        except:
-            raise forms.ValidationError("Invalid student.")
+    # def clean_student(self):
+    #     student = int(self.data['student']) if (self.data['student']).isnumeric() else 0
+    #     try:
+    #         student =User.objects.get(id = student)
+    #         return student
+    #     except:
+    #         raise forms.ValidationError("Invalid student.")
             
-    def clean_book(self):
-        book = int(self.data['book']) if (self.data['book']).isnumeric() else 0
-        try:
-            book = models.Books.objects.get(id = book)
-            return book
-        except:
-            raise forms.ValidationError("Invalid Book.")
+    # def clean_book(self):
+    #     book = int(self.data['book']) if (self.data['book']).isnumeric() else 0
+    #     try:
+    #         book =Books.objects.get(id=book)
+    #         return book
+    #     except:
+    #         raise forms.ValidationError("Invalid Book.")
 
 class IssuedBookForm(forms.Form):
     #to_field_name value will be stored when form is submitted.....__str__ method of book model will be shown there in html

@@ -2,8 +2,7 @@ import datetime
 from django.shortcuts import redirect, render,get_object_or_404
 import json
 from django.contrib import messages
-from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseRedirect
 from lmsApp import models, forms
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
@@ -105,7 +104,11 @@ def login_page(request):
     resp = {"status":'failed','msg':''}
     username = ''
     password = ''
+    redirect_to = request.GET.get('next', '')
+    current_url = request.path
+    print(current_url)
     if request.POST:
+        
         username = request.POST['username']
         password = request.POST['password']
 
@@ -114,12 +117,18 @@ def login_page(request):
             if user.is_active:
                 login(request, user)
                 resp['status']='success'
-                if user.is_staff:
+                if current_url is not '/login':
+                    if user.is_staff:
+                        
+                        return redirect('home/')
+                    else:
+                        return redirect('/')
                     
-                    return redirect('home/')
                 else:
-                    print("logged in")
-                    return redirect('/')
+                    return redirect(redirect_to) 
+                    
+                # else:
+               
             else:
                 resp['msg'] = "Incorrect username or password"
         else:
@@ -135,19 +144,20 @@ def home(request):
     context = context_data(request)
     context['page'] = 'home'
     context['page_title'] = 'Home'
-    context['categories'] = models.Category.objects.filter(delete_flag = 0, status = 1).all().count()
-    context['sub_categories'] = models.SubCategory.objects.filter(delete_flag = 0, status = 1).all().count()
-    context['students'] = models.Students.objects.filter(delete_flag = 0, status = 1).all().count()
-    context['books'] = models.Students.objects.filter(delete_flag = 0, status = 1).all().count()
-    context['pending'] = models.Borrow.objects.filter(status = 1).all().count()
-    context['pending'] = models.Borrow.objects.filter(status = 1).all().count()
-    context['transactions'] = models.Borrow.objects.all().count()
+    context['categories'] = Category.objects.filter(delete_flag = 0, status = 1).all().count()
+    context['sub_categories'] = SubCategory.objects.filter(delete_flag = 0, status = 1).all().count()
+    context['students'] =Students.objects.filter(delete_flag = 0, status = 1).all().count()
+    context['books'] =Students.objects.filter(delete_flag = 0, status = 1).all().count()
+    context['pending'] = Borrow.objects.filter(status = 1).all().count()
+    context['pending'] = Borrow.objects.filter(status = 1).all().count()
+    context['transactions'] =Borrow.objects.all().count()
 
     return render(request, 'home.html', context)
 
 def logout_user(request):
     logout(request)
-    return redirect('login-page')
+    messages.info(request, "Logged out successfully!")
+    return HttpResponseRedirect(request.GET.get('next','/'))
     
 @login_required
 def profile(request):
@@ -224,7 +234,7 @@ def category(request):
     context = context_data(request)
     context['page'] = 'category'
     context['page_title'] = "Category List"
-    context['category'] = models.Category.objects.filter(delete_flag = 0).all()
+    context['category'] =Category.objects.filter(delete_flag = 0).all()
     return render(request, 'category.html', context)
 
 @login_required
@@ -233,7 +243,7 @@ def save_category(request):
     if request.method == 'POST':
         post = request.POST
         if not post['id'] == '':
-            category = models.Category.objects.get(id = post['id'])
+            category = Category.objects.get(id = post['id'])
             form = forms.SaveCategory(request.POST, instance=category)
         else:
             form = forms.SaveCategory(request.POST) 
@@ -264,7 +274,7 @@ def view_category(request, pk = None):
     if pk is None:
         context['category'] = {}
     else:
-        context['category'] = models.Category.objects.get(id=pk)
+        context['category'] = Category.objects.get(id=pk)
     
     return render(request, 'view_category.html', context)
 
@@ -276,7 +286,7 @@ def manage_category(request, pk = None):
     if pk is None:
         context['category'] = {}
     else:
-        context['category'] = models.Category.objects.get(id=pk)
+        context['category'] = Category.objects.get(id=pk)
     
     return render(request, 'manage_category.html', context)
 
@@ -287,7 +297,7 @@ def delete_category(request, pk = None):
         resp['msg'] = 'Category ID is invalid'
     else:
         try:
-            models.Category.objects.filter(pk = pk).update(delete_flag = 1)
+            Category.objects.filter(pk = pk).update(delete_flag = 1)
             messages.success(request, "Category has been deleted successfully.")
             resp['status'] = 'success'
         except:
@@ -300,7 +310,7 @@ def sub_category(request):
     context = context_data(request)
     context['page'] = 'sub_category'
     context['page_title'] = "Sub Category List"
-    context['sub_category'] = models.SubCategory.objects.filter(delete_flag = 0).all()
+    context['sub_category'] = SubCategory.objects.filter(delete_flag = 0).all()
     return render(request, 'sub_category.html', context)
 
 @login_required
@@ -309,7 +319,7 @@ def save_sub_category(request):
     if request.method == 'POST':
         post = request.POST
         if not post['id'] == '':
-            sub_category = models.SubCategory.objects.get(id = post['id'])
+            sub_category = SubCategory.objects.get(id = post['id'])
             form = forms.SaveSubCategory(request.POST, instance=sub_category)
         else:
             form = forms.SaveSubCategory(request.POST) 
@@ -340,7 +350,7 @@ def view_sub_category(request, pk = None):
     if pk is None:
         context['sub_category'] = {}
     else:
-        context['sub_category'] = models.SubCategory.objects.get(id=pk)
+        context['sub_category'] = SubCategory.objects.get(id=pk)
     
     return render(request, 'view_sub_category.html', context)
 
@@ -352,8 +362,8 @@ def manage_sub_category(request, pk = None):
     if pk is None:
         context['sub_category'] = {}
     else:
-        context['sub_category'] = models.SubCategory.objects.get(id=pk)
-    context['categories'] = models.Category.objects.filter(delete_flag = 0, status = 1).all()
+        context['sub_category'] = SubCategory.objects.get(id=pk)
+    context['categories'] = Category.objects.filter(delete_flag = 0, status = 1).all()
     return render(request, 'manage_sub_category.html', context)
 
 @login_required
@@ -363,7 +373,7 @@ def delete_sub_category(request, pk = None):
         resp['msg'] = 'Sub Category ID is invalid'
     else:
         try:
-            models.SubCategory.objects.filter(pk = pk).update(delete_flag = 1)
+            SubCategory.objects.filter(pk = pk).update(delete_flag = 1)
             messages.success(request, "Sub Category has been deleted successfully.")
             resp['status'] = 'success'
         except:
@@ -376,7 +386,7 @@ def books(request):
     context = context_data(request)
     context['page'] = 'book'
     context['page_title'] = "Book List"
-    context['books'] = models.Books.objects.filter(delete_flag = 0).all()
+    context['books'] = Books.objects.filter(delete_flag = 0).all()
     return render(request, 'books.html', context)
 
 @login_required
@@ -385,7 +395,7 @@ def save_book(request):
     if request.method == 'POST':
         post = request.POST
         if not post['id'] == '':
-            book = models.Books.objects.get(id = post['id'])
+            book = Books.objects.get(id = post['id'])
             form = forms.SaveBook(request.POST, instance=book)
         else:
             form = forms.SaveBook(request.POST) 
@@ -416,7 +426,7 @@ def view_book(request, pk = None):
     if pk is None:
         context['book'] = {}
     else:
-        context['book'] = models.Books.objects.get(id=pk)
+        context['book'] = Books.objects.get(id=pk)
     
     return render(request, 'view_book.html', context)
 
@@ -428,8 +438,8 @@ def manage_book(request, pk = None):
     if pk is None:
         context['book'] = {}
     else:
-        context['book'] = models.Books.objects.get(id=pk)
-    context['sub_categories'] = models.SubCategory.objects.filter(delete_flag = 0, status = 1).all()
+        context['book'] = Books.objects.get(id=pk)
+    context['sub_categories'] = SubCategory.objects.filter(delete_flag = 0, status = 1).all()
     return render(request, 'manage_book.html', context)
 
 @login_required
@@ -439,7 +449,7 @@ def delete_book(request, pk = None):
         resp['msg'] = 'Book ID is invalid'
     else:
         try:
-            models.Books.objects.filter(pk = pk).update(delete_flag = 1)
+            Books.objects.filter(pk = pk).update(delete_flag = 1)
             messages.success(request, "Book has been deleted successfully.")
             resp['status'] = 'success'
         except:
@@ -452,7 +462,7 @@ def students(request):
     context = context_data(request)
     context['page'] = 'student'
     context['page_title'] = "Student List"
-    context['students'] = models.Students.objects.filter(delete_flag = 0).all()
+    context['students'] = Students.objects.filter(delete_flag = 0).all()
     return render(request, 'students.html', context)
 
 @login_required
@@ -461,7 +471,7 @@ def save_student(request):
     if request.method == 'POST':
         post = request.POST
         if not post['id'] == '':
-            student = models.Students.objects.get(id = post['id'])
+            student = Students.objects.get(id = post['id'])
             form = forms.SaveStudent(request.POST, instance=student)
         else:
             form = forms.SaveStudent(request.POST) 
@@ -492,7 +502,7 @@ def view_student(request, pk = None):
     if pk is None:
         context['student'] = {}
     else:
-        context['student'] = models.Students.objects.get(id=pk)
+        context['student'] = Students.objects.get(id=pk)
     
     return render(request, 'view_student.html', context)
 
@@ -504,8 +514,8 @@ def manage_student(request, pk = None):
     if pk is None:
         context['student'] = {}
     else:
-        context['student'] = models.Students.objects.get(id=pk)
-    context['sub_categories'] = models.SubCategory.objects.filter(delete_flag = 0, status = 1).all()
+        context['student'] = Students.objects.get(id=pk)
+    context['sub_categories'] = SubCategory.objects.filter(delete_flag = 0, status = 1).all()
     return render(request, 'manage_student.html', context)
 
 @login_required
@@ -515,7 +525,7 @@ def delete_student(request, pk = None):
         resp['msg'] = 'Student ID is invalid'
     else:
         try:
-            models.Students.objects.filter(pk = pk).update(delete_flag = 1)
+            Students.objects.filter(pk = pk).update(delete_flag = 1)
             messages.success(request, "Student has been deleted successfully.")
             resp['status'] = 'success'
         except:
@@ -528,7 +538,7 @@ def borrows(request):
     context = context_data(request)
     context['page'] = 'borrow'
     context['page_title'] = "Borrowing Transaction List"
-    context['borrows'] = models.Borrow.objects.order_by('status').all()
+    context['borrows'] = Borrow.objects.order_by('status').all()
     return render(request, 'borrows.html', context)
 
 @login_required
@@ -537,7 +547,7 @@ def save_borrow(request):
     if request.method == 'POST':
         post = request.POST
         if not post['id'] == '':
-            borrow = models.Borrow.objects.get(id = post['id'])
+            borrow = Borrow.objects.get(id = post['id'])
             form = forms.SaveBorrow(request.POST, instance=borrow)
         else:
             form = forms.SaveBorrow(request.POST) 
@@ -568,7 +578,7 @@ def view_borrow(request, pk = None):
     if pk is None:
         context['borrow'] = {}
     else:
-        context['borrow'] = models.Borrow.objects.get(id=pk)
+        context['borrow'] = Borrow.objects.get(id=pk)
     
     return render(request, 'view_borrow.html', context)
 
@@ -580,9 +590,9 @@ def manage_borrow(request, pk = None):
     if pk is None:
         context['borrow'] = {}
     else:
-        context['borrow'] = models.Borrow.objects.get(id=pk)
-    context['students'] = models.Students.objects.filter(delete_flag = 0, status = 1).all()
-    context['books'] = models.Books.objects.filter(delete_flag = 0, status = 1).all()
+        context['borrow'] = Borrow.objects.get(id=pk)
+    context['students'] = Students.objects.filter(delete_flag = 0, status = 1).all()
+    context['books'] = Books.objects.filter(delete_flag = 0, status = 1).all()
     return render(request, 'manage_borrow.html', context)
 
 @login_required
@@ -592,7 +602,7 @@ def delete_borrow(request, pk = None):
         resp['msg'] = 'Transaction ID is invalid'
     else:
         try:
-            models.Borrow.objects.filter(pk = pk).delete()
+            Borrow.objects.filter(pk = pk).delete()
             messages.success(request, "Transaction has been deleted successfully.")
             resp['status'] = 'success'
         except:
@@ -608,7 +618,7 @@ def issuebook_view(request):
         #now this form have data from html
         form=forms.IssuedBookForm(request.POST)
         if form.is_valid():
-            obj=models.IssuedBook()
+            obj=IssuedBook()
             obj.enrollment=request.POST.get('enrollment2')
             obj.isbn=request.POST.get('isbn2')
             obj.save()
@@ -637,14 +647,19 @@ def book_catalogue(request):
 @login_required
 def book_request(request,pk):
     #book_id=request.GET.get('q','')
-    book=get_object_or_404(Books, id=pk)
+    book=Books.objects.get(id=pk)    
+    s = get_object_or_404(User, id=str(request.user.id))
     form = SaveBorrow()
-    if request.method=="POST":
-        
+    if request.method=="POST":        
+        form = SaveBorrow(request.POST)
+        print(form.errors)
         if form.is_valid():
+            print('sucesss')
             form.save()
+            messages.success(request,"successfully requested for the book")
+            return redirect('/')
     
-    context={"form":form, 'book':book}
+    context={"form":form, 'book':book, 'student':s}
     return render(request, "main-page/book_request_form.html", context)
 
 @login_required
