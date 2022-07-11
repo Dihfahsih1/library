@@ -10,7 +10,7 @@
     {% else %}
     <title>{{system_name}}</title>
     {% endif %}
-    <link rel="shortcut icon" href="{% static 'assets/default/img/logo.jpg' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'assets/img/logo.jpg' %}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer"
     />
     <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
@@ -50,8 +50,9 @@
             object-position: center center;
             transition: all .2s ease-in-out;
         }
+
         body{
-            background-image:url("{% static 'assets/default/img/bg1.jpg' %}");
+            background-image:url("{% static '' %}");
             background-size:cover;
             background-repeat:no-repeat;
             background-position:center center;
@@ -60,7 +61,7 @@
     {% block headerContent %} {% endblock headerContent %}
 </head>
 
-<body class="">
+<body class="bg">
     {% if topbar %} {% block TopNavigation %} {% include "topNavigation.html" %} {% endblock TopNavigation %} {% endif %}
     <main class="py-5 mt-4">
         <div class="container mb-3">

@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime,timedelta,date
 from django.shortcuts import redirect, render,get_object_or_404
 import json
 from django.contrib import messages
@@ -610,6 +610,32 @@ def delete_borrow(request, pk = None):
 
     return HttpResponse(json.dumps(resp), content_type="application/json")
 
+####View issued book######
+def viewissuedbook_view(request):
+    issuedbooks=IssuedBook.objects.all()
+    li=[]
+    for ib in issuedbooks:
+        issdate=str(ib.issuedate.day)+'-'+str(ib.issuedate.month)+'-'+str(ib.issuedate.year)
+        expdate=str(ib.expirydate.day)+'-'+str(ib.expirydate.month)+'-'+str(ib.expirydate.year)
+        #fine calculation
+        days=(date.today()-ib.issuedate)
+        print(date.today())
+        d=days.days
+        fine=0
+        if d>15:
+            day=d-15
+            fine=day*10
+
+
+        books=list(Books.objects.filter(isbn=ib.isbn))
+        students=list(StudentExtra.objects.filter(enrollment=ib.enrollment))
+        i=0
+        for l in books:
+            t=(students[i].get_name,students[i].enrollment,books[i].name,books[i].author,issdate,expdate,fine)
+            i=i+1
+            li.append(t)
+
+    return render(request,'library/viewissuedbook.html',{'li':li})
 
 ######ISSUE BOOK MODULE#######
 def issuebook_view(request):
