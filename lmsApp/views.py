@@ -63,7 +63,6 @@ def update_profile(request):
     if not request.method == 'POST':
         form = UpdateProfile(instance=user)
         context['form'] = form
-        print(form)
     else:
         form =UpdateProfile(request.POST, instance=user)
         if form.is_valid():
