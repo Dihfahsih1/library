@@ -33,7 +33,7 @@ class UpdateProfile(UserChangeForm):
 
     class Meta:
         model = User
-        fields = ('email', 'username','first_name', 'last_name')
+        fields = ('email', 'username','first_name', 'last_name','profile_summary')
 
     def clean_current_password(self):
         if not self.instance.check_password(self.cleaned_data['current_password']):
