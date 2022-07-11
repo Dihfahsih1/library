@@ -41,7 +41,7 @@ def save_register(request):
     if not request.method == 'POST':
         resp['msg'] = "No data has been sent on this request"
     else:
-        form = forms.SaveUser(request.POST)
+        form =SaveUser(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, "Your Account has been created succesfully")
@@ -61,11 +61,11 @@ def update_profile(request):
     context['page_title'] = 'Update Profile'
     user = User.objects.get(id = request.user.id)
     if not request.method == 'POST':
-        form = forms.UpdateProfile(instance=user)
+        form = UpdateProfile(instance=user)
         context['form'] = form
         print(form)
     else:
-        form = forms.UpdateProfile(request.POST, instance=user)
+        form =UpdateProfile(request.POST, instance=user)
         if form.is_valid():
             form.save()
             messages.success(request, "Profile has been updated")
@@ -80,7 +80,7 @@ def update_password(request):
     context =context_data(request)
     context['page_title'] = "Update Password"
     if request.method == 'POST':
-        form = forms.UpdatePasswords(user = request.user, data= request.POST)
+        form =UpdatePasswords(user = request.user, data= request.POST)
         if form.is_valid():
             form.save()
             messages.success(request,"Your Account Password has been updated successfully")
@@ -89,7 +89,7 @@ def update_password(request):
         else:
             context['form'] = form
     else:
-        form = forms.UpdatePasswords(request.POST)
+        form =UpdatePasswords(request.POST)
         context['form'] = form
     return render(request,'update_password.html',context)
 
@@ -181,9 +181,9 @@ def save_user(request):
         post = request.POST
         if not post['id'] == '':
             user = User.objects.get(id = post['id'])
-            form = forms.UpdateUser(request.POST, instance=user)
+            form =UpdateUser(request.POST, instance=user)
         else:
-            form = forms.SaveUser(request.POST) 
+            form =SaveUser(request.POST) 
 
         if form.is_valid():
             form.save()
@@ -244,9 +244,9 @@ def save_category(request):
         post = request.POST
         if not post['id'] == '':
             category = Category.objects.get(id = post['id'])
-            form = forms.SaveCategory(request.POST, instance=category)
+            form =SaveCategory(request.POST, instance=category)
         else:
-            form = forms.SaveCategory(request.POST) 
+            form =SaveCategory(request.POST) 
 
         if form.is_valid():
             form.save()
@@ -320,9 +320,9 @@ def save_sub_category(request):
         post = request.POST
         if not post['id'] == '':
             sub_category = SubCategory.objects.get(id = post['id'])
-            form = forms.SaveSubCategory(request.POST, instance=sub_category)
+            form = SaveSubCategory(request.POST, instance=sub_category)
         else:
-            form = forms.SaveSubCategory(request.POST) 
+            form = SaveSubCategory(request.POST) 
 
         if form.is_valid():
             form.save()
@@ -396,9 +396,9 @@ def save_book(request):
         post = request.POST
         if not post['id'] == '':
             book = Books.objects.get(id = post['id'])
-            form = forms.SaveBook(request.POST, instance=book)
+            form = SaveBook(request.POST, instance=book)
         else:
-            form = forms.SaveBook(request.POST) 
+            form = SaveBook(request.POST) 
 
         if form.is_valid():
             form.save()
@@ -472,9 +472,9 @@ def save_student(request):
         post = request.POST
         if not post['id'] == '':
             student = Students.objects.get(id = post['id'])
-            form = forms.SaveStudent(request.POST, instance=student)
+            form = SaveStudent(request.POST, instance=student)
         else:
-            form = forms.SaveStudent(request.POST) 
+            form = SaveStudent(request.POST) 
 
         if form.is_valid():
             form.save()
@@ -548,9 +548,9 @@ def save_borrow(request):
         post = request.POST
         if not post['id'] == '':
             borrow = Borrow.objects.get(id = post['id'])
-            form = forms.SaveBorrow(request.POST, instance=borrow)
+            form =SaveBorrow(request.POST, instance=borrow)
         else:
-            form = forms.SaveBorrow(request.POST) 
+            form =SaveBorrow(request.POST) 
 
         if form.is_valid():
             form.save()
@@ -639,10 +639,10 @@ def viewissuedbook_view(request):
 
 ######ISSUE BOOK MODULE#######
 def issuebook_view(request):
-    form=forms.IssuedBookForm()
+    form=IssuedBookForm()
     if request.method=='POST':
         #now this form have data from html
-        form=forms.IssuedBookForm(request.POST)
+        form=IssuedBookForm(request.POST)
         if form.is_valid():
             obj=IssuedBook()
             obj.enrollment=request.POST.get('enrollment2')
