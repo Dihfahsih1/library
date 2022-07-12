@@ -1,16 +1,80 @@
-from datetime import datetime
-from random import random
-from secrets import choice
-from sys import prefix
-from unicodedata import category
+
 from django import forms
-from numpy import require
 from . models import *
 
 from django.contrib.auth.forms import UserCreationForm,PasswordChangeForm, UserChangeForm
 from django.contrib.auth.models import User
-from Profile.models import *
-import datetime
+
+from django.contrib.auth.forms import UserCreationForm
+class StudentSignupForm(UserCreationForm):
+
+  def __init__(self, *args, **kwargs):
+    super(StudentSignupForm, self).__init__(*args, **kwargs)
+    self.fields["first_name"].label = "First Name"
+    self.fields["last_name"].label = "Last Name"
+    self.fields["password1"].label = "Password"
+    self.fields["password2"].label = "Confirm Password"
+
+    # self.fields['gender'].widget = forms.CheckboxInput()
+
+    self.fields["first_name"].widget.attrs.update(
+        {
+            "placeholder": "Enter First Name",
+        }
+    )
+    self.fields["last_name"].widget.attrs.update(
+        {
+            "placeholder": "Enter Last Name",
+        }
+    )
+    self.fields["email"].widget.attrs.update(
+        {
+            "placeholder": "Enter Email",
+        }
+    )
+    self.fields["password1"].widget.attrs.update(
+        {
+            "placeholder": "Enter Password",
+        }
+    )
+    self.fields["password2"].widget.attrs.update(
+        {
+            "placeholder": "Confirm Password",
+        }
+    )
+
+  class Meta:
+    model = Profile
+    
+    exclude = ()
+    fields = [
+        "first_name", "last_name", 'avatar', 'gender',
+        'birth_date', 'telephone','profile_summary','course',"email", "password1",  "password2",
+        
+    ]
+    error_messages = {
+        "first_name": {
+            "required": "First name is required",
+            "max_length": "Name is too long",
+        },
+        "last_name": {
+            "required": "Last name is required",
+            "max_length": "Last Name is too long",
+        },
+        "gender": {"required": "Gender is required"},
+    }
+
+  def clean_gender(self):
+    gender = self.cleaned_data.get("gender")
+    if not gender:
+        raise forms.ValidationError("Gender is required")
+    return gender
+
+  def save(self, commit=True):
+    user = super(UserCreationForm, self).save(commit=False)
+    if commit:
+      user.save()
+    return user
 
 class SaveUser(UserCreationForm):
     username = forms.CharField(max_length=250,help_text="The Username field is required.")
@@ -32,7 +96,7 @@ class UpdateProfile(UserChangeForm):
     current_password = forms.CharField(max_length=250)
 
     class Meta:
-        model = User
+        model = Profile
         fields = ('email', 'username','first_name', 'last_name','profile_summary')
 
     def clean_current_password(self):
@@ -42,7 +106,7 @@ class UpdateProfile(UserChangeForm):
     def clean_email(self):
         email = self.cleaned_data['email']
         try:
-            user = User.objects.exclude(id=self.cleaned_data['id']).get(email = email)
+            user = Profile.objects.exclude(id=self.cleaned_data['id']).get(email = email)
         except Exception as e:
             return email
         raise forms.ValidationError(f"The {user.email} mail is already exists/taken")
@@ -50,7 +114,7 @@ class UpdateProfile(UserChangeForm):
     def clean_username(self):
         username = self.cleaned_data['username']
         try:
-            user = User.objects.exclude(id=self.cleaned_data['id']).get(username = username)
+            user = Profile.objects.exclude(id=self.cleaned_data['id']).get(username = username)
         except Exception as e:
             return username
         raise forms.ValidationError(f"The {user.username} mail is already exists/taken")
@@ -62,13 +126,13 @@ class UpdateUser(UserChangeForm):
     last_name = forms.CharField(max_length=250,help_text="The Last Name field is required.")
 
     class Meta:
-        model = User
+        model = Profile
         fields = ('email', 'username','first_name', 'last_name')
 
     def clean_email(self):
         email = self.cleaned_data['email']
         try:
-            user = User.objects.exclude(id=self.cleaned_data['id']).get(email = email)
+            user = Profile.objects.exclude(id=self.cleaned_data['id']).get(email = email)
         except Exception as e:
             return email
         raise forms.ValidationError(f"The {user.email} mail is already exists/taken")
@@ -76,7 +140,7 @@ class UpdateUser(UserChangeForm):
     def clean_username(self):
         username = self.cleaned_data['username']
         try:
-            user = User.objects.exclude(id=self.cleaned_data['id']).get(username = username)
+            user = Profile.objects.exclude(id=self.cleaned_data['id']).get(username = username)
         except Exception as e:
             return username
         raise forms.ValidationError(f"The {user.username} mail is already exists/taken")
@@ -86,7 +150,7 @@ class UpdatePasswords(PasswordChangeForm):
     new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control form-control-sm rounded-0'}), label="New Password")
     new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control form-control-sm rounded-0'}), label="Confirm New Password")
     class Meta:
-        model = User
+        model = Profile
         fields = ('old_password','new_password1', 'new_password2')
 
 class SaveCategory(forms.ModelForm):
@@ -190,8 +254,8 @@ class SaveStudent(forms.ModelForm):
     status = forms.CharField(max_length=2)
 
     class Meta:
-        model = Students
-        fields = ('code', 'first_name', 'middle_name', 'last_name', 'gender', 'contact', 'email', 'address', 'department', 'course', 'status', )
+        model = Profile
+        fields = ('first_name', 'last_name', 'gender', 'telephone', 'email', 'address', 'course', 'status', )
 
     def clean_code(self):
         id = int(self.data['id']) if (self.data['id']).isnumeric() else 0
@@ -213,7 +277,7 @@ class SaveBorrow(forms.ModelForm):
     # def clean_student(self):
     #     student = int(self.data['student']) if (self.data['student']).isnumeric() else 0
     #     try:
-    #         student =User.objects.get(id = student)
+    #         student =Profile.objects.get(id = student)
     #         return student
     #     except:
     #         raise forms.ValidationError("Invalid student.")
@@ -228,7 +292,8 @@ class SaveBorrow(forms.ModelForm):
 
 class IssuedBookForm(forms.Form):
     #to_field_name value will be stored when form is submitted.....__str__ method of book model will be shown there in html
-    isbn2=forms.ModelChoiceField(queryset=Books.objects.all(),empty_label="Name and isbn", to_field_name="isbn",label='Name and Isbn')
+    
+    isbn2=forms.ModelChoiceField(queryset=Borrow.objects.filter(status='Returned'),empty_label="Name and isbn", to_field_name="isbn",label='Name and Isbn')
     enrollment2=forms.ModelChoiceField(queryset=StudentExtra.objects.all(),empty_label="Name and enrollment",to_field_name='enrollment',label='Name and enrollment')
     
     

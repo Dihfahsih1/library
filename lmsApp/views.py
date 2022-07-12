@@ -3,14 +3,18 @@ from django.shortcuts import redirect, render,get_object_or_404
 import json
 from django.contrib import messages
 from django.http import HttpResponse,HttpResponseRedirect
-from lmsApp import models, forms
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from . models import *
 from . forms import *
-from Profile.models import User
+from django.shortcuts import render
 from django.contrib import messages
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect, render
+from django.views.generic import CreateView
+from django.urls import reverse_lazy
+from django.db import transaction
 
 def context_data(request):
     fullpath = request.get_full_path()
@@ -145,8 +149,8 @@ def home(request):
     context['page_title'] = 'Home'
     context['categories'] = Category.objects.filter(delete_flag = 0, status = 1).all().count()
     context['sub_categories'] = SubCategory.objects.filter(delete_flag = 0, status = 1).all().count()
-    context['students'] =Students.objects.filter(delete_flag = 0, status = 1).all().count()
-    context['books'] =Students.objects.filter(delete_flag = 0, status = 1).all().count()
+    context['students'] =Profile.objects.filter(delete_flag = 0, status = 1, is_superuser=False).all().count()
+    context['books'] =Profile.objects.filter(delete_flag = 0, status = 1).all().count()
     context['pending'] = Borrow.objects.filter(status = 1).all().count()
     context['pending'] = Borrow.objects.filter(status = 1).all().count()
     context['transactions'] =Borrow.objects.all().count()
@@ -220,7 +224,7 @@ def delete_user(request, pk = None):
         resp['msg'] = 'User ID is invalid'
     else:
         try:
-            User.objects.filter(pk = pk).delete()
+            Profile.objects.filter(pk = pk).delete()
             messages.success(request, "User has been deleted successfully.")
             resp['status'] = 'success'
         except:
@@ -461,7 +465,7 @@ def students(request):
     context = context_data(request)
     context['page'] = 'student'
     context['page_title'] = "Student List"
-    context['students'] = Students.objects.filter(delete_flag = 0).all()
+    context['students'] = Profile.objects.filter(delete_flag = 0).all()
     return render(request, 'students.html', context)
 
 @login_required
@@ -470,7 +474,7 @@ def save_student(request):
     if request.method == 'POST':
         post = request.POST
         if not post['id'] == '':
-            student = Students.objects.get(id = post['id'])
+            student = Profile.objects.get(id = post['id'])
             form = SaveStudent(request.POST, instance=student)
         else:
             form = SaveStudent(request.POST) 
@@ -501,7 +505,7 @@ def view_student(request, pk = None):
     if pk is None:
         context['student'] = {}
     else:
-        context['student'] = Students.objects.get(id=pk)
+        context['student'] = Profile.objects.get(id=pk)
     
     return render(request, 'view_student.html', context)
 
@@ -513,7 +517,7 @@ def manage_student(request, pk = None):
     if pk is None:
         context['student'] = {}
     else:
-        context['student'] = Students.objects.get(id=pk)
+        context['student'] = Profile.objects.get(id=pk)
     context['sub_categories'] = SubCategory.objects.filter(delete_flag = 0, status = 1).all()
     return render(request, 'manage_student.html', context)
 
@@ -524,7 +528,7 @@ def delete_student(request, pk = None):
         resp['msg'] = 'Student ID is invalid'
     else:
         try:
-            Students.objects.filter(pk = pk).update(delete_flag = 1)
+            Profile.objects.filter(pk = pk).update(delete_flag = 1)
             messages.success(request, "Student has been deleted successfully.")
             resp['status'] = 'success'
         except:
@@ -590,7 +594,7 @@ def manage_borrow(request, pk = None):
         context['borrow'] = {}
     else:
         context['borrow'] = Borrow.objects.get(id=pk)
-    context['students'] = Students.objects.filter(delete_flag = 0, status = 1).all()
+    context['students'] = Profile.objects.filter(delete_flag = 0, status = 1).all()
     context['books'] = Books.objects.filter(delete_flag = 0, status = 1).all()
     return render(request, 'manage_borrow.html', context)
 
@@ -673,7 +677,7 @@ def book_catalogue(request):
 def book_request(request,pk):
     #book_id=request.GET.get('q','')
     book=Books.objects.get(id=pk)    
-    s = get_object_or_404(User, id=str(request.user.id))
+    s = get_object_or_404(Profile, id=str(request.user.id))
     form = SaveBorrow()
     if request.method=="POST":        
         form = SaveBorrow(request.POST)
@@ -690,8 +694,8 @@ def book_request(request,pk):
 @login_required
 def student_request_issue(request, pk):
     obj = Books.objects.get(id=pk)
-    stu=User.objects.get(id=request.user.id)
-    s = get_object_or_404(User, id=str(request.user.id))
+    stu=Profile.objects.get(id=request.user.id)
+    s = get_object_or_404(Profile, id=str(request.user.id))
     if s.total_books_due < 10:
         messages.success(request,"book has been isuued, You can collect book from library")
         a = Borrow()
@@ -706,3 +710,22 @@ def student_request_issue(request, pk):
     else:
         messages.success(request,"you have exceeded limit.")
     return render(request, 'main-page/search_catalogue.html', locals())
+
+##########Student Sign Up############
+class student_signup(CreateView):
+  model = User
+  success_message = 'Your Account has been created sucessfully!'
+  success_url = reverse_lazy('login-page')
+  template_name = "Student/student_signup.html"
+  form_class=StudentSignupForm
+
+  def form_valid(self, form):
+    context = self.get_context_data()
+
+    with transaction.atomic():
+      user = form.save(commit=False)
+      password = form.cleaned_data.get("password1")
+      user.set_password(password)
+      user.save()
+      self.object = form.save()
+    return super(student_signup, self).form_valid(form)

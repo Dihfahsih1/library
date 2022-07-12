@@ -54,7 +54,7 @@ urlpatterns = [
     path('save_borrow',views.save_borrow,name='save-borrow'),
     path('delete_borrow/<int:pk>',views.delete_borrow,name='delete-borrow'),
     path('search',views.search,name='search'),
-    
+    path('student/signup/', views.student_signup.as_view(), name="student-signup"),
     #issue book url
     path('book/<int:pk>/request/', views.book_request, name="book-request"),
     path('issuebook', views.issuebook_view, name="issuebook"),

@@ -6,9 +6,36 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from datetime import datetime,timedelta
 
-from PIL import Image
-from django.contrib.auth.base_user import BaseUserManager
-from Profile.models import User
+from django.db import models
+
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+from django.utils.timezone import now
+
+
+GENDER_CHOICES = (("male", "Male"), ("female", "Female"))
+
+class Profile(AbstractUser):
+  registration_date = models.DateTimeField(default=now, editable=False)
+  
+  avatar=models.FileField(upload_to='media/avatars/', null=True, blank=True, default="media/default/avatar.png")
+  gender=models.CharField(max_length=8,choices=GENDER_CHOICES, default='male',null=True, blank=True)
+  
+  telephone=models.CharField(max_length=200, null=True, blank=True)
+  address=models.CharField(max_length=200, null=True, blank=True)
+  birth_date=models.DateField(blank=True, null=True)
+  course=models.CharField(max_length=200,null=True, blank=True)
+  total_books_due=models.IntegerField(default=0)
+  delete_flag = models.IntegerField(default = 0)
+  profile_summary = models.TextField(max_length=2000,blank=True, null=True)
+  status = models.CharField(max_length=2, choices=(('1','Active'), ('2','Inactive')), default = 1)
+  
+  USERNAME_FIELD = "username"
+  EMAIL_FIELD = 'email'
+  REQUIRED_FIELDS = []
+
+  def __unicode__(self):
+      return self.email
 
 
 # Create your models here.
@@ -63,33 +90,8 @@ class Books(models.Model):
         return str(f"{self.isbn} - {self.title}")
 
 
-class Students(models.Model):
-    code = models.CharField(max_length=250)
-    first_name = models.CharField(max_length=250)
-    middle_name = models.CharField(max_length=250, blank=True, null= True)
-    last_name = models.CharField(max_length=250)
-    gender = models.CharField(max_length=20, choices=(('Male','Male'), ('Female','Female')), default = 'Male')
-    contact = models.CharField(max_length=250)
-    email = models.CharField(max_length=250)
-    address = models.CharField(max_length=250)
-    department = models.CharField(max_length=250, blank= True, null = True)
-    course = models.CharField(max_length=250, blank= True, null = True)
-    status = models.CharField(max_length=2, choices=(('1','Active'), ('2','Inactive')), default = 1)
-    delete_flag = models.IntegerField(default = 0)
-    date_added = models.DateTimeField(default = timezone.now)
-    date_created = models.DateTimeField(auto_now = True)
-
-    class Meta:
-        verbose_name_plural = "List of Students"
-
-    def __str__(self):
-        return str(f"{self.code} - {self.first_name}{' '+self.middle_name if not self.middle_name == '' else ''} {self.last_name}")
-
-    def name(self):
-        return str(f"{self.first_name}{' '+self.middle_name if not self.middle_name == '' else ''} {self.last_name}")
-
 class Borrow(models.Model):
-    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name="student_id_fk", blank=True, null=True)
+    student = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="student_id_fk", blank=True, null=True)
     book = models.ForeignKey(Books, on_delete= models.CASCADE, related_name="book_id_fk")
     borrowing_date = models.DateField()
     return_date = models.DateField()
@@ -103,7 +105,7 @@ class Borrow(models.Model):
     def __str__(self):
         return str(f"{self.student}")
 class StudentExtra(models.Model):
-    user=models.OneToOneField(User,on_delete=models.CASCADE)
+    user=models.OneToOneField(Profile,on_delete=models.CASCADE)
     enrollment = models.CharField(max_length=40)
     branch = models.CharField(max_length=40)
     #used in issue book

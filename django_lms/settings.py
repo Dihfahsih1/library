@@ -30,7 +30,6 @@ INSTALLED_APPS = [
   'django.contrib.staticfiles',
   'django.contrib.humanize',
   'lmsApp.apps.lmsAppConfig',
-  'Profile',
   'crispy_forms',
   'github_storages',
 ]
@@ -54,7 +53,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'django_lms.urls'
-AUTH_USER_MODEL = 'Profile.User'
+AUTH_USER_MODEL = 'lmsApp.Profile'
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
