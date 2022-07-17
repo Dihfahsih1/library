@@ -85,7 +85,7 @@ class SaveUser(UserCreationForm):
     password2 = forms.CharField(max_length=250)
 
     class Meta:
-        model = User
+        model = Profile
         fields = ('email', 'username','first_name', 'last_name','password1', 'password2',)
 
 class UpdateProfile(UserChangeForm):

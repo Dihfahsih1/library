@@ -63,7 +63,7 @@ def save_register(request):
 def update_profile(request):
     context = context_data(request)
     context['page_title'] = 'Update Profile'
-    user = User.objects.get(id = request.user.id)
+    user = Profile.objects.get(id = request.user.id)
     if not request.method == 'POST':
         form = UpdateProfile(instance=user)
         context['form'] = form
@@ -174,7 +174,7 @@ def users(request):
     context = context_data(request)
     context['page'] = 'users'
     context['page_title'] = "User List"
-    context['users'] = User.objects.exclude(pk=request.user.pk).filter(is_superuser = False).all()
+    context['users'] = Profile.objects.exclude(pk=request.user.pk).filter(is_superuser = False).all()
     return render(request, 'users.html', context)
 
 @login_required
@@ -183,7 +183,7 @@ def save_user(request):
     if request.method == 'POST':
         post = request.POST
         if not post['id'] == '':
-            user = User.objects.get(id = post['id'])
+            user = Profile.objects.get(id = post['id'])
             form =UpdateUser(request.POST, instance=user)
         else:
             form =SaveUser(request.POST) 
@@ -214,7 +214,7 @@ def manage_user(request, pk = None):
     if pk is None:
         context['user'] = {}
     else:
-        context['user'] = User.objects.get(id=pk)
+        context['user'] = Profile.objects.get(id=pk)
     return render(request, 'manage_user.html', context)
 
 @login_required
