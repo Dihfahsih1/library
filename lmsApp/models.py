@@ -20,22 +20,19 @@ class Profile(AbstractUser):
   
   avatar=models.FileField(upload_to='media/avatars/', null=True, blank=True, default="media/default/avatar.png")
   gender=models.CharField(max_length=8,choices=GENDER_CHOICES, default='male',null=True, blank=True)
-  
+  username=models.CharField(max_length=200, null=True, blank=True)
   telephone=models.CharField(max_length=200, null=True, blank=True)
   address=models.CharField(max_length=200, null=True, blank=True)
   birth_date=models.DateField(blank=True, null=True)
+  email=models.EmailField(unique=True)
   course=models.CharField(max_length=200,null=True, blank=True)
   total_books_due=models.IntegerField(default=0)
   delete_flag = models.IntegerField(default = 0)
   profile_summary = models.TextField(max_length=2000,blank=True, null=True)
   status = models.CharField(max_length=2, choices=(('1','Active'), ('2','Inactive')), default = 1)
-  
-  username = models.CharField(max_length=30, unique=True)
-  
-  USERNAME_FIELD = "username"
-  USERNAME_FIELD = "username"
+  USERNAME_FIELD = "email"
   EMAIL_FIELD = 'email'
-  REQUIRED_FIELDS = []
+  REQUIRED_FIELDS = ['username']
 
   def __unicode__(self):
       return self.email

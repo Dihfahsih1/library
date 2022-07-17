@@ -241,7 +241,6 @@ class SaveBook(forms.ModelForm):
         raise forms.ValidationError("ISBN already exists on the Database.")
   
 class SaveStudent(forms.ModelForm):
-    username = forms.CharField(max_length=250)
     first_name = forms.CharField(max_length=250)
     middle_name = forms.CharField(max_length=250, required= False)
     last_name = forms.CharField(max_length=250)
@@ -255,7 +254,7 @@ class SaveStudent(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ('first_name', 'last_name', 'gender', 'telephone', 'email', 'address', 'course', 'status','username' )
+        fields = ('first_name', 'last_name', 'gender', 'telephone', 'email', 'address', 'course', 'status', )
 
     def clean_code(self):
         id = int(self.data['id']) if (self.data['id']).isnumeric() else 0
