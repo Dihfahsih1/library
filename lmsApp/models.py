@@ -30,6 +30,9 @@ class Profile(AbstractUser):
   profile_summary = models.TextField(max_length=2000,blank=True, null=True)
   status = models.CharField(max_length=2, choices=(('1','Active'), ('2','Inactive')), default = 1)
   
+  username = models.CharField(max_length=30, unique=True)
+  
+  USERNAME_FIELD = "username"
   USERNAME_FIELD = "username"
   EMAIL_FIELD = 'email'
   REQUIRED_FIELDS = []
