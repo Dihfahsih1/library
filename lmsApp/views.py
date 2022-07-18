@@ -6,6 +6,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from requests import request
 from . models import *
 from . forms import *
 from django.shortcuts import render
@@ -109,7 +110,6 @@ def login_page(request):
     password = ''
     redirect_to = request.GET.get('next', '')
     current_url = request.path
-    print(current_url)
     if request.POST:
         
         username = request.POST['username']
@@ -120,7 +120,7 @@ def login_page(request):
             if user.is_active:
                 login(request, user)
                 resp['status']='success'
-                if current_url is not '/login':
+                if current_url != '/login':
                     if user.is_staff:
                         
                         return redirect('home/')
@@ -713,19 +713,20 @@ def student_request_issue(request, pk):
 
 ##########Student Sign Up############
 class student_signup(CreateView):
-  model = User
+  model = Profile
   success_message = 'Your Account has been created sucessfully!'
-  success_url = reverse_lazy('login-page')
+  success_url = reverse_lazy('profile-page')
   template_name = "Student/student_signup.html"
   form_class=StudentSignupForm
 
   def form_valid(self, form):
     context = self.get_context_data()
-
-    with transaction.atomic():
-      user = form.save(commit=False)
-      password = form.cleaned_data.get("password1")
-      user.set_password(password)
-      user.save()
-      self.object = form.save()
+    user = form.save(commit=False)
+    password = form.cleaned_data.get("password1")
+    user.set_password(password)
+    user.save()
+    self.object = form.save()
+    new_user = authenticate(username=form.cleaned_data['email'],
+                            password=form.cleaned_data['password1'])
+    login(self.request,new_user)
     return super(student_signup, self).form_valid(form)
