@@ -271,7 +271,7 @@ class SaveStudent(forms.ModelForm):
 class SaveBorrow(forms.ModelForm):
     class Meta:
         model = Borrow
-        fields = ('student', 'book', 'borrowing_date', 'return_date', 'status', )
+        fields = ('student', 'book', 'borrowing_date', 'return_date', 'status', 'request_status')
 
     # def clean_student(self):
     #     student = int(self.data['student']) if (self.data['student']).isnumeric() else 0

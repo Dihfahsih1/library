@@ -99,10 +99,6 @@ def update_password(request):
 
 def login_page(request):
     context = context_data(request)
-    context['topbar'] = False
-    context['footer'] = True
-    context['page_name'] = 'login'
-    context['page_title'] = 'Login'
     
     logout(request)
     resp = {"status":'failed','msg':''}
@@ -110,8 +106,8 @@ def login_page(request):
     password = ''
     redirect_to = request.GET.get('next', '')
     current_url = request.path
+    print(current_url)
     if request.POST:
-        
         username = request.POST['username']
         password = request.POST['password']
 
@@ -120,12 +116,11 @@ def login_page(request):
             if user.is_active:
                 login(request, user)
                 resp['status']='success'
-                if current_url != '/login':
+                if current_url == '/login':
                     if user.is_staff:
-                        
                         return redirect('home/')
                     else:
-                        return redirect('/')
+                        return redirect('profile-page')
                     
                 else:
                     return redirect(redirect_to) 
@@ -150,9 +145,9 @@ def home(request):
     context['categories'] = Category.objects.filter(delete_flag = 0, status = 1).all().count()
     context['sub_categories'] = SubCategory.objects.filter(delete_flag = 0, status = 1).all().count()
     context['students'] =Profile.objects.filter(delete_flag = 0, status = 1, is_superuser=False).all().count()
-    context['books'] =Profile.objects.filter(delete_flag = 0, status = 1).all().count()
-    context['pending'] = Borrow.objects.filter(status = 1).all().count()
-    context['pending'] = Borrow.objects.filter(status = 1).all().count()
+    context['books'] =Books.objects.filter(delete_flag = 0, status = 1).all().count()
+    context['unapproved'] = Borrow.objects.filter(request_status = 1).all().count()
+    context['approved'] = Borrow.objects.filter(request_status = 2).all().count()
     context['transactions'] =Borrow.objects.all().count()
 
     return render(request, 'home.html', context)

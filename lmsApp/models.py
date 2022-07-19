@@ -96,6 +96,7 @@ class Borrow(models.Model):
     borrowing_date = models.DateField()
     return_date = models.DateField()
     status = models.CharField(max_length=2, choices=(('1','Pending'), ('2','Returned')), default = 1)
+    request_status = models.CharField(max_length=2, choices=(('1','unapproved'), ('2','approved')), default = 1,blank=True, null=True)
     date_added = models.DateTimeField(default = timezone.now)
     date_created = models.DateTimeField(auto_now = True)
 
