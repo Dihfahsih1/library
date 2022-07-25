@@ -30,7 +30,9 @@
             {% for book in book_list%}
             <tr>
               {% if book.book_cover %}
-              <td ><img {% if book.book_cover %} src="{{book.book_cover.url}}" {% else %}alt="No Image"{% endif %} class="img-responsive" width="200"></td>
+              <td >
+                <img {% if book.book_cover %} src="{{book.book_cover.url}}" {% else %}alt="No Image"{% endif %} class="img-responsive" width="200">
+              </td>
               {% endif %}
               <td>{{book.title}}</td>
               <td>{{book.sub_category}}</td>

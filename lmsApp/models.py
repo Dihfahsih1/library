@@ -67,7 +67,7 @@ class SubCategory(models.Model):
         verbose_name_plural = "List of Categories"
 
     def __str__(self):
-        return str(f"{self.category} - {self.name}")
+        return str(f"{self.name} / {self.name}")
 
 class Books(models.Model):
     book_cover = models.ImageField(upload_to="media/book-covers", blank=True, null=False)

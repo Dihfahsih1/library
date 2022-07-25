@@ -35,12 +35,12 @@ INSTALLED_APPS = [
 ]
 
 ####GIT-HUB STORAGE####
-if DEBUG ==False:
-    DEFAULT_FILE_STORAGE = "github_storages.backend.BackendStorages"
-    GITHUB_HANDLE =env('GITHUB_HANDLE')
-    ACCESS_TOKEN =env('ACCESS_TOKEN')
-    GITHUB_REPO_NAME =env('GITHUB_REPO_NAME')
-    MEDIA_BUCKET_NAME =env('MEDIA_BUCKET_NAME')
+# if DEBUG ==False:
+#     DEFAULT_FILE_STORAGE = "github_storages.backend.BackendStorages"
+#     GITHUB_HANDLE =env('GITHUB_HANDLE')
+#     ACCESS_TOKEN =env('ACCESS_TOKEN')
+#     GITHUB_REPO_NAME =env('GITHUB_REPO_NAME')
+#     MEDIA_BUCKET_NAME =env('MEDIA_BUCKET_NAME')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -74,7 +74,10 @@ TEMPLATES = [
 WSGI_APPLICATION = 'django_lms.wsgi.application'
 
 DATABASES = {
-    'default':dj_database_url.config()
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+    }
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -103,9 +106,11 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [ 
-  BASE_DIR / "static",]
+
+STATICFILES_DIRS = [BASE_DIR / "static",]
+
 MEDIA_URL = '/media/'
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = '/login'

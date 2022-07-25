@@ -98,19 +98,16 @@ def update_password(request):
     return render(request,'update_password.html',context)
 
 def login_page(request):
-    context = context_data(request)
-    
+    context = context_data(request)    
     logout(request)
     resp = {"status":'failed','msg':''}
     username = ''
     password = ''
     redirect_to = request.GET.get('next', '')
     current_url = request.path
-    print(current_url)
     if request.POST:
-        username = request.POST['username']
+        username = request.POST.get('username')
         password = request.POST['password']
-
         user = authenticate(username=username, password=password)
         if user is not None:
             if user.is_active:
@@ -143,7 +140,8 @@ def unapproved_book_request(request):
 
 def approve_request(request, pk):
     if request.method == "GET":
-        Borrow.objects.update(request_status=2)
+        
+        Borrow.objects.update(id=pk,request_status=2)
         messages.success(request, f'Request Approved')
         return redirect('unapproved_book_request')
 @login_required
