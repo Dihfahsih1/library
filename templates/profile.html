@@ -10,6 +10,9 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-8">
+                                {% if user.avatar %}
+                                    <img src={{ user.avatar.url}} width=50 height=50>
+                                {% endif %}
                                 <dl>
                                     <dt class="text-muted">Fullname</dt>
                                     <dd class="ps-4">{{ user.first_name }} {{ user.last_name }}</dd>
