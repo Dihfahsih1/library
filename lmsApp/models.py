@@ -18,7 +18,7 @@ GENDER_CHOICES = (("male", "Male"), ("female", "Female"))
 class Profile(AbstractUser):
   registration_date = models.DateTimeField(default=now, editable=False)
   
-  avatar=models.FileField(upload_to='media/avatars/', null=True, blank=True, default="media/default/avatar.png")
+  avatar=models.FileField(upload_to='avatars/', null=True, blank=True, default="default/avatar.png")
   gender=models.CharField(max_length=8,choices=GENDER_CHOICES, default='male',null=True, blank=True)
   username=models.CharField(max_length=200, null=True, blank=True)
   telephone=models.CharField(max_length=200, null=True, blank=True)
