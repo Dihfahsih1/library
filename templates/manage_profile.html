@@ -13,6 +13,12 @@
                             <div class="mdc-layout-grid">
                                 <div class="mdc-layout-grid__inner">
                                     <div class="form-group mb-3">
+                                        {% if form.data.avatar %}
+                                            <img src={{request.user.avatar.url}}>
+                                        {% endif %}
+                                        <input type="file" class="form-control rounded-0" name="avatar">
+                                    </div>
+                                    <div class="form-group mb-3">
                                         <label for="first_name" class="control-label">First Name</label>
                                         <input type="text" class="form-control rounded-0" name="first_name" id="first_name" value="{% if form.data.first_name %}{{ form.data.first_name }}{% else %}{{ user.first_name }}{% endif %}" required="required">
                                     </div>
@@ -32,10 +38,10 @@
                                         <label for="profile_summary" class="control-label">Bio</label>
                                         <input type="text" class="form-control rounded-0" name="profile_summary" id="profile_summary">
                                     </div>
-                                    <div class="form-group mb-3">
+                                    {% comment %} <div class="form-group mb-3">
                                         <label for="current_password" class="control-label">Enter Password</label>
                                         <input type="password" class="form-control rounded-0" name="current_password" id="current_password" required="required">
-                                    </div>
+                                    </div> {% endcomment %}
                                     {% for field in form %} {% for error in field.errors %}
                                     <div class="alert alert-danger my-2">
                                         <p>{{ error }}</p>

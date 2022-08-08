@@ -93,11 +93,12 @@ class UpdateProfile(UserChangeForm):
     email = forms.EmailField(max_length=250,help_text="The Email field is required.")
     first_name = forms.CharField(max_length=250,help_text="The First Name field is required.")
     last_name = forms.CharField(max_length=250,help_text="The Last Name field is required.")
-    current_password = forms.CharField(max_length=250)
+    # we don't use blank=True or null=True in forms rather we use required
+    #current_password = forms.CharField(max_length=250, required=False)
 
     class Meta:
         model = Profile
-        fields = ('email', 'username','first_name', 'last_name','profile_summary')
+        fields = ('avatar','email', 'username','first_name', 'last_name','profile_summary')
 
     def clean_current_password(self):
         if not self.instance.check_password(self.cleaned_data['current_password']):
