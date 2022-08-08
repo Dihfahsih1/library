@@ -69,7 +69,7 @@ def update_profile(request):
         form = UpdateProfile(instance=user)
         context['form'] = form
     else:
-        form =UpdateProfile(request.POST, instance=user)
+        form =UpdateProfile(request.POST,request.FILES, instance=user)
         if form.is_valid():
             form.save()
             messages.success(request, "Profile has been updated")

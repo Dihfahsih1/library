@@ -28,7 +28,7 @@
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="username" class="control-label">Username</label>
-                                        <input type="text" class="form-control rounded-0" name="username" id="username" required="required">
+                                        <input type="text" class="form-control rounded-0" name="username" id="username" value="{% if form.data.username %}{{ form.data.username }}{% else %}{{ user.username }}{% endif %}" required="required">
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="email" class="control-label">Email</label>
@@ -36,7 +36,7 @@
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="profile_summary" class="control-label">Bio</label>
-                                        <input type="text" class="form-control rounded-0" name="profile_summary" id="profile_summary">
+                                        <input type="text" class="form-control rounded-0" name="profile_summary" id="profile_summary" value="{% if form.data.profile_summary %}{{ form.data.profile_summary }}{% else %}{{ user.profile_summary }}{% endif %}" >
                                     </div>
                                     {% comment %} <div class="form-group mb-3">
                                         <label for="current_password" class="control-label">Enter Password</label>
