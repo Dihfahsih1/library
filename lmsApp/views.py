@@ -135,12 +135,15 @@ def welcome(request):
     return render(request, 'main-page/index.html')
 
 def unapproved_book_request(request):
+    context = context_data(request)
+    context['page_title'] = 'Book Requests'
     qs=Borrow.objects.all()
-    return render(request,'unapproved_book_request.html',{'qs':qs})
+    context['qs']=qs
+    return render(request,'unapproved_book_request.html',context)
 
 def approve_request(request, pk):
+
     if request.method == "GET":
-        
         Borrow.objects.update(id=pk,request_status=2)
         messages.success(request, f'Request Approved')
         return redirect('unapproved_book_request')
