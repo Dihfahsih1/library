@@ -142,7 +142,6 @@ def unapproved_book_request(request):
     return render(request,'unapproved_book_request.html',context)
 
 def approve_request(request, pk):
-
     if request.method == "GET":
         Borrow.objects.update(id=pk,request_status=2)
         messages.success(request, f'Request Approved')
@@ -575,7 +574,6 @@ def save_borrow(request):
                     resp['msg'] += str(f'[{field.name}] {error}')
     else:
         resp['msg'] = "There's no data sent on the request"
-
     return HttpResponse(json.dumps(resp), content_type="application/json")
 
 @login_required
@@ -677,7 +675,6 @@ def book_catalogue(request):
     context={'book_list':all_books}
     return render(request,'main-page/book_catalogue.html', context)
 
-###Borrow Book###
 @login_required
 def book_request(request,pk):
     #book_id=request.GET.get('q','')
