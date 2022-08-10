@@ -134,18 +134,6 @@ def login_page(request):
 def welcome(request):
     return render(request, 'main-page/index.html')
 
-def unapproved_book_request(request):
-    context = context_data(request)
-    context['page_title'] = 'Book Requests'
-    qs=Borrow.objects.all()
-    context['qs']=qs
-    return render(request,'unapproved_book_request.html',context)
-
-def approve_request(request, pk):
-    if request.method == "GET":
-        Borrow.objects.update(id=pk,request_status=2)
-        messages.success(request, f'Request Approved')
-        return redirect('unapproved_book_request')
 @login_required
 def home(request):
     context = context_data(request)
@@ -677,15 +665,12 @@ def book_catalogue(request):
 
 @login_required
 def book_request(request,pk):
-    #book_id=request.GET.get('q','')
     book=Books.objects.get(id=pk)    
     s = get_object_or_404(Profile, id=str(request.user.id))
     form = SaveBorrow()
     if request.method=="POST":        
         form = SaveBorrow(request.POST)
-        print(form.errors)
         if form.is_valid():
-            print('sucesss')
             form.save()
             messages.success(request,"successfully requested for the book")
             return redirect('/')
@@ -713,6 +698,18 @@ def student_request_issue(request, pk):
         messages.success(request,"you have exceeded limit.")
     return render(request, 'main-page/search_catalogue.html', locals())
 
+def unapproved_book_request(request):
+    context = context_data(request)
+    context['page_title'] = 'Book Requests'
+    qs=Borrow.objects.all()
+    context['qs']=qs
+    return render(request,'unapproved_book_request.html',context)
+
+def approve_request(request, pk):
+    if request.method == "GET":
+        Borrow.objects.update(id=pk,request_status=2)
+        messages.success(request, f'Request Approved')
+        return redirect('unapproved_book_request')
 ##########Student Sign Up############
 class student_signup(CreateView):
   model = Profile
