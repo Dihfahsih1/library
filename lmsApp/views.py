@@ -134,7 +134,7 @@ def login_page(request):
 def welcome(request):
     return render(request, 'main-page/index.html')
 
-@login_required
+#login_required
 def home(request):
     context = context_data(request)
     context['page'] = 'home'

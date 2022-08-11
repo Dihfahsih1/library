@@ -1,4 +1,15 @@
 from django.test import TestCase
+from .models import Profile
+from django.shortcuts import reverse
 
 class LibraryTestCase(TestCase):
-  pass
+  def test_dashboard(self):
+    user=Profile.objects.create_user("test11","user11@gmail.com","MugoYA23?")
+    print(user)
+    print("has been created successfully")
+    self.client.login(username='test11', password='MugoYA23?')
+    if user.is_authenticated:
+      print('Logged in')
+    response=self.client.get('/dashbord')
+    self.assertEqual(response.status_code, 200)
+  
