@@ -134,7 +134,7 @@ def login_page(request):
 def welcome(request):
     return render(request, 'main-page/index.html')
 
-#login_required
+login_required
 def home(request):
     context = context_data(request)
     context['page'] = 'home'
@@ -729,3 +729,7 @@ class student_signup(CreateView):
                             password=form.cleaned_data['password1'])
     login(self.request,new_user)
     return super(student_signup, self).form_valid(form)
+
+def reports(request):
+    context={}
+    return render(request, 'reports.html', context)
