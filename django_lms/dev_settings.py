@@ -1,7 +1,9 @@
 from pathlib import Path
 import os
 BASE_DIR = Path(__file__).resolve().parent.parent
-DEBUG=True
+
+
+DEBUG=True#This is to ensure that the server does not the db of the live server
 ALLOWED_HOSTS=["*"]
 DATABASES = {
     "default": {
