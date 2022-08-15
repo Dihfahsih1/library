@@ -5,13 +5,16 @@ import os,django
 from django.utils.encoding import force_str
 django.utils.encoding.force_text = force_str
 import environ
+try:
+    from .dev_settings import *
+except ImportError as e :
+    pass
+    
 env = environ.Env()
 environ.Env.read_env()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-j7xv%)66l8u0^8sxnj7()z$zll8&a2*_h2r84yeo9f2fidx8^7'
-
-DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -71,10 +74,11 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'django_lms.wsgi.application'
-
-DATABASES = {
-    "default": dj_database_url.config()
-}
+DEBUG = False
+if DEBUG:
+    DATABASES = {
+        "default": dj_database_url.config()
+    }
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -110,3 +114,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = '/login'
 django_heroku.settings(locals())
+
+print(DEBUG)
