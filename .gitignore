@@ -9,3 +9,4 @@ __pycache__
 /.heroku
 /staticfiles
 /.profile.d
+dev_settings.py
