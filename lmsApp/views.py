@@ -672,7 +672,6 @@ def book_request(request,pk):
         form = SaveBorrow(request.POST)
         if form.is_valid():
             form.save()
-            Books.objects.update(id=pk,status=2)
             messages.success(request,"successfully requested for the book")
             return redirect('/')
     
@@ -709,7 +708,7 @@ def unapproved_book_request(request):
 def approve_request(request, pk):
     if request.method == "GET":
         Borrow.objects.update(id=pk,request_status=2)
-        Books.objects.update(id=pk,status=1)
+        Books.objects.update(id=pk,status=2)
         messages.success(request, f'Request Approved')
         return redirect('unapproved_book_request')
     
