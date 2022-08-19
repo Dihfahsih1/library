@@ -734,6 +734,21 @@ class student_signup(CreateView):
     login(self.request,new_user)
     return super(student_signup, self).form_valid(form)
 
-def reports(request):
-    context={}
-    return render(request, 'reports.html', context)
+def view_borrowed_books(request):
+    borrowed_books = Borrow.objects.all()
+    details = []
+    for i in borrowed_books:
+        days = (date.today()-i.borrowing_date)
+        d=days.days
+        fine=0
+        if d>15:
+            day=d-15
+            fine=day*1000
+        books = list(models.Books.objects.filter(isbn=i.isbn))
+        students = list(models.Profile.objects.filter(id=i.student))
+        i=0
+        for l in books:
+            t=(students[i].user,students[i].user_id,books[i].name,books[i].isbn,borrowed_books[0].issued_date,borrowed_books[0].expiry_date,fine)
+            i=i+1
+            details.append(t)
+    return render(request, "view_borrowed_book.html", {'borrowed_books':borrowed_books, 'details':details})

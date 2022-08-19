@@ -89,12 +89,13 @@ class Books(models.Model):
     def __str__(self):
         return str(f"{self.isbn} - {self.title}")
 
-
+def expiry():
+    return datetime.today() + timedelta(days=14)
 class Borrow(models.Model):
     student = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="student_id_fk", blank=True, null=True)
     book = models.ForeignKey(Books, on_delete= models.CASCADE, related_name="book_id_fk")
     borrowing_date = models.DateField()
-    return_date = models.DateField()
+    return_date = models.DateField(default=expiry)
     status = models.CharField(max_length=2, choices=(('1','Pending'), ('2','Returned')), default = 1)
     request_status = models.CharField(max_length=2, choices=(('1','unapproved'), ('2','approved')), default = 1,blank=True, null=True)
     date_added = models.DateTimeField(default = timezone.now)
@@ -119,12 +120,4 @@ class StudentExtra(models.Model):
     def getuserid(self):
         return self.user.id    
     
-def get_expiry():
-    return datetime.today() + timedelta(days=15)
-class IssuedBook(models.Model):
-    enrollment=models.CharField(max_length=30)
-    isbn=models.CharField(max_length=30)
-    issuedate=models.DateField(auto_now=True)
-    expirydate=models.DateField(default=get_expiry)
-    def __str__(self):
-        return self.enrollment
+ 
