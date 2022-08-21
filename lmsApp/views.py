@@ -712,7 +712,7 @@ def approve_request(request, pk):
         messages.success(request, f'Request Approved')
         return redirect('unapproved_book_request')
     
-def return_book(equest, pk):
+# def return_book(equest, pk):
     
 ##########Student Sign Up############
 class student_signup(CreateView):
