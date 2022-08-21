@@ -64,7 +64,7 @@ class SubCategory(models.Model):
     date_created = models.DateTimeField(auto_now = True)
 
     class Meta:
-        verbose_name_plural = "List of Categories"
+        verbose_name_plural = "List of SubCategories"
 
     def __str__(self):
         return str(f"{self.name} / {self.name}")
@@ -87,7 +87,7 @@ class Books(models.Model):
         verbose_name_plural = "List of Books"
 
     def __str__(self):
-        return str(f"{self.isbn} - {self.title}")
+        return self.title
 
 def get_expiry():
     return datetime.today() + timedelta(days=14)
