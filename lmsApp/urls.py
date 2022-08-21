@@ -61,4 +61,5 @@ urlpatterns = [
     path('book/<int:pk>/request_issue/', views.student_request_issue, name='request_issue'),
     path('request/<int:pk>/approve/', views.approve_request, name='approve_request'),
     path('book/requests', views.unapproved_book_request, name="unapproved_book_request"),
+    path('Borrowed-Books',views.view_borrowed_books,name='view_borrowed_books'),
 ]+ static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
