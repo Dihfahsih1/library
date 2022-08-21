@@ -74,11 +74,11 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'django_lms.wsgi.application'
-DEBUG = False
-if DEBUG:
-    DATABASES = {
-        "default": dj_database_url.config()
-    }
+# DEBUG = True
+# if DEBUG:
+#     DATABASES = {
+#         "default": dj_database_url.config()
+#     }
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',

@@ -744,11 +744,11 @@ def view_borrowed_books(request):
         if d>15:
             day=d-15
             fine=day*1000
-        books = list(models.Books.objects.filter(isbn=i.isbn))
-        students = list(models.Profile.objects.filter(is_staff=False,id=i.student))
+        books = list(Books.objects.filter(isbn=i.book))
+        students = list(Profile.objects.filter(is_staff=False,email=i.student))
         i=0
         for l in books:
             t=(students[i].email,students[i].id,books[i].title,books[i].isbn,borrowed_books[0].borrowing_date,borrowed_books[0].return_date,fine)
             i=i+1
             details.append(t)
-    return render(request, "view_borrowed_book.html", {'borrowed_books':borrowed_books, 'details':details})
+    return render(request, "view_borrowed_books.html", {'borrowed_books':borrowed_books, 'details':details})
