@@ -604,32 +604,6 @@ def delete_borrow(request, pk = None):
 
     return HttpResponse(json.dumps(resp), content_type="application/json")
 
-####View issued book######
-def viewissuedbook_view(request):
-    issuedbooks=IssuedBook.objects.all()
-    li=[]
-    for ib in issuedbooks:
-        issdate=str(ib.issuedate.day)+'-'+str(ib.issuedate.month)+'-'+str(ib.issuedate.year)
-        expdate=str(ib.expirydate.day)+'-'+str(ib.expirydate.month)+'-'+str(ib.expirydate.year)
-        #fine calculation
-        days=(date.today()-ib.issuedate)
-        print(date.today())
-        d=days.days
-        fine=0
-        if d>15:
-            day=d-15
-            fine=day*10
-
-
-        books=list(Books.objects.filter(isbn=ib.isbn))
-        students=list(StudentExtra.objects.filter(enrollment=ib.enrollment))
-        i=0
-        for l in books:
-            t=(students[i].get_name,students[i].enrollment,books[i].name,books[i].author,issdate,expdate,fine)
-            i=i+1
-            li.append(t)
-
-    return render(request,'library/viewissuedbook.html',{'li':li})
 
 ######ISSUE BOOK MODULE#######
 def issuebook_view(request):
@@ -740,11 +714,13 @@ def view_borrowed_books(request):
     for i in borrowed_books:
         days = (date.today()-i.borrowing_date)
         d=days.days
-        
         fine=0
-        if d>15:
-            day=d-15
-            fine=day*1000
+        if d>14:
+            day=d-14
+            if 3 <= day < 3:
+                fine=10000
+            elif day>=10:
+                fine=15000
         
         books = list(Books.objects.filter(title=i.book))
         students = list(Profile.objects.filter(is_staff=False,email=i.student))
