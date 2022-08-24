@@ -103,7 +103,7 @@ class Borrow(models.Model):
 
     class Meta:
         verbose_name_plural = "Borrowing Transactions"
-
+  
     def __str__(self):
         return str(f"{self.student}")
 class StudentExtra(models.Model):

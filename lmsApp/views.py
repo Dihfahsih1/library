@@ -717,17 +717,17 @@ def view_borrowed_books(request):
         fine=0
         if d>14:
             day=d-14
-            if 3 <= day < 3:
+            if 3 <= day < 10:
                 fine=10000
             elif day>=10:
                 fine=15000
         
         books = list(Books.objects.filter(title=i.book))
         students = list(Profile.objects.filter(is_staff=False,email=i.student))
-        print(students)
+         
         i=0
-        for l in books:
-            t=(students[i].email,students[i].id,books[i].title,books[i].isbn,borrowed_books[0].borrowing_date,borrowed_books[0].return_date,fine)
+        for L in books:
+            t=(students[i].email,students[i].id,books[i].title,books[i].isbn,borrowed_books[i].borrowing_date,borrowed_books[i].return_date,fine)
             i=i+1
             details.append(t)
     context = context_data(request)

@@ -54,7 +54,9 @@
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="abtn{{book.pk}}">
                                             <li><a class="dropdown-item view-data" href="javascript:void(0)" data-url="{% url 'approve_request' book.pk %}"><i class="fa fa-eye text-dark"></i> approve</a></li>
-                                            <li><a class="dropdown-item edit-data" href="javascript:void(0)" data-url="#"><i class="fa fa-edit text-primary"></i> Edit</a></li>
+
+                                            <li><a class="dropdown-item edit-data" href="javascript:void(0)" data-url="{% url 'manage-borrow-pk' book.pk %}"><i class="fa fa-edit text-primary"></i> Edit</a></li>
+
                                             <li><a class="dropdown-item delete-data" href="javascript:void(0)" data-url="#"><i class="fa fa-trash text-danger"></i> Delete</a></li>
                                         </ul>
                                     </div>
