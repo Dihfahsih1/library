@@ -53,10 +53,13 @@
                         <a class="nav-link" aria-current="page" href="{% url 'borrow-page' %}">Add Borrow</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{% url 'view_borrowed_books' %}">View Borrow Books</a>
+                        <a class="nav-link" aria-current="page" href="{% url 'view_borrowed_books' %}">Borrowed Books</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{% url 'unapproved_book_request' %}">Book Requests</a>
+                        <a class="nav-link" aria-current="page" href="{% url 'unapproved_book_request' %}">Unapproved Requests</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{% url 'approved_book_requests' %}">Approved Requests</a>
                     </li>
                     
                     {% endif %}

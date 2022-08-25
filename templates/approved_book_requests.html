@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% load static %} {% block pageContent %}
 <section class="py-4">
     <div class="container">
-        <h3 class="fw-bolder text-center">Unapproved Requests</h3>
+        <h3 class="fw-bolder text-center">Approved requests</h3>
         <center>
             <hr class="bg-primary opacity-100" style="height:3px" width="5%">
         </center>
@@ -42,25 +42,7 @@
                                 <td>{{ book.book.title}}</td>
                                 <td>{{ book.borrowing_date}}</td>
                                 <td>{{ book.return_date }}</td>
-                                <td class="text-center">
-                                    {% if book.request_status == '2' %}
-                                    <span class="badge badge-success bg-gradient bg-success px-3 rounded-pill bg-opacity-75 text-sm py-1">Approved</span> {% else %}
-                                    <span class="badge badge-secondary bg-gradient bg-secondary px-3 rounded-pill bg-opacity-75 text-sm py-1">Unapproved</span> {% endif %}
-                                </td>
-                                <td class="text-center">
-                                    <div class="dropdown">
-                                        <button class="btn btn-light btn-sm rounded-0 border dropdown-toggle" type="button" id="abtn{{book.pk}}" data-bs-toggle="dropdown" aria-expanded="false">
-                                          Action
-                                        </button>
-                                        <ul class="dropdown-menu" aria-labelledby="abtn{{book.pk}}">
-                                            <li><a class="dropdown-item view-data" href="javascript:void(0)" data-url="{% url 'approve_request' book.pk %}"><i class="fa fa-eye text-dark"></i> approve</a></li>
-
-                                            <li><a class="dropdown-item edit-data" href="javascript:void(0)" data-url="{% url 'manage-borrow-pk' book.pk %}"><i class="fa fa-edit text-primary"></i> Edit</a></li>
-
-                                            <li><a class="dropdown-item delete-data" href="javascript:void(0)" data-url="#"><i class="fa fa-trash text-danger"></i> Delete</a></li>
-                                        </ul>
-                                    </div>
-                                </td>
+                                <td><a href="{% url 'return_book' book.id %}"> <i class="fa fa-edit"> </i>Return</a></td>
                             </tr>
                             {% endfor %}
                         </tbody>
